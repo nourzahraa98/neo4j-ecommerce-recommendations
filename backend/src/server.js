@@ -28,6 +28,13 @@ app.get('/getip', function (req, res) {
 });
 
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Allow requests from any origin, replace '*' with the specific origin of your frontend application
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE'); // Specify the allowed HTTP methods
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Specify the allowed headers
+
+  next();
+});
 
 app.listen(port, () => {
   console.log(`backend is listening at http://localhost:${port}`);

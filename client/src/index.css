@@ -1,0 +1,25 @@
+.country-select :focus{
+  border:  1px solid #6741d9;
+ 
+  
+}
+
+.country-select  .ReactFlagsSelect-module_selectOptions__3LNBJ{
+  
+  background:#1A1B1E;
+  border : 0.0625rem solid #373A40;
+}
+
+.country-select  .ReactFlagsSelect-module_selectOption__3pcgW:hover{
+   background:#434343 ;
+
+}
+
+.country-select .ReactFlagsSelect-module_selectBtn__19wW7{
+  background : #25262b
+}
+
+.country-select .ReactFlagsSelect-module_selectValue__152eS{
+  color : #99999b;
+  font-size:  14px;
+}
