@@ -8,7 +8,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
     const icon = 'icon';
     return {
         navbar: {
-            backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background,
+            backgroundColor: theme.fn.variant({ variant: 'filled', }),
             overflow: 'auto',
             width: '25%',
             [theme.fn.smallerThan("md")]: {
