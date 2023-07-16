@@ -21,6 +21,17 @@ const get_order_by_id = async (req, res) => {
 		});
 }
 
+const get_order_by_user = async (req, res) => {
+	Order.getByUser(req.params.id)
+		.then((order) => {
+			console.log(order);
+			res.send(order.properties);
+		})
+		.catch((error) => {
+			res.status(500).send({ message: "product not found" });
+		});
+}
+
 const create_order = async (req, res) => {
 	const { userId } = req.body;
 	console.table({ userId });
@@ -59,5 +70,6 @@ module.exports = {
 	get_order_by_id,
 	create_order,
 	rate_product,
-	gen_recommendations
+	gen_recommendations,
+	get_order_by_user
 }

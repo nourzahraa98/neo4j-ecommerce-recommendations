@@ -24,7 +24,6 @@ const LoginPage = (props) => {
     
   const { currentUser, dispatch } = useContext(AuthContext);
   const { colorScheme } = useMantineColorScheme();
-  console.log(`${colorScheme}`)
   const navigate = useNavigate();
   const [selected, setSelected] = useState("");
   const onSelect = (code) => setSelected(code);
@@ -77,11 +76,18 @@ const LoginPage = (props) => {
         });
     }
     if (type === "register") {
+      console.log({
+        email: form.email,
+        password: form.password,
+        region: selected,
+        name: form.name
+      })
       axios
         .post("http://localhost:4000/users/register", {
           email: form.email,
           password: form.password,
-          country: selected,
+          region: selected,
+          name: form.name
         })
         .then((res) => {
           dispatch({ type: "LOGIN", payload: res.data });

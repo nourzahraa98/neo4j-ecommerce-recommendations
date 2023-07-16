@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate, Outlet } from "react-router-dom";
 import { HomePage, SettingsPage, LoginPage, ProductPage, CartPage, PageNotFound, SearchPage, AdminPage } from "./pages/_index";
-import { NavBar, Footer, ProfileInfoSettings, ShippingInfoSettings, PasswordInfoSettings, ArchiveAndReport, ContactAndSupport, InfosAndCharts, ManageAccounts, ManageProducts, ManageOrders, ProductDetailsAdmin } from "./components/_index";
+import { NavBar, Footer, ProfileInfoSettings, AddShippingAddress,ManageShippingAddress, PasswordInfoSettings, ArchiveAndReport, ContactAndSupport, InfosAndCharts, ManageAccounts, ManageProducts, ManageOrders, ProductDetailsAdmin } from "./components/_index";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./context/AuthContext";
 
@@ -49,7 +49,9 @@ function App() {
           <Route path="search" element={<SearchPage />} />
           <Route path="settings" element={<RequireAuth><SettingsPage /></RequireAuth>} >
             <Route path="change-profile-info" element={<ProfileInfoSettings />} />
-            <Route path="change-shipping-info" element={<ShippingInfoSettings />} />
+            <Route path="add-shipping-info" element={<AddShippingAddress />} />
+            <Route path="manage-shipping-info" element={<ManageShippingAddress />} />
+
             <Route path="change-password" element={<PasswordInfoSettings />} />
           </Route>
           <Route path="admin" element={<AdminPage />} >

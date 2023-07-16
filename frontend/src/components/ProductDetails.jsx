@@ -91,7 +91,7 @@ const ProductDetails = ({ data }) => {
                                 </ActionIcon>
                             </Tooltip>
                         </Group>
-                        <ProductCollapse />
+                        <ProductCollapse data={data} isSkeleton={false} />
                     </Grid.Col>
                 </Grid>
             ) : (

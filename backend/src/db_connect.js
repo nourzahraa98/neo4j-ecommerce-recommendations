@@ -27,17 +27,16 @@ async function RunQuery(query) {
     await openSession();
     try {
       const result = await session.run(query);
-      await session.close();
+    
       return result;
     } catch (error) {
-      session.close();
       console.error(error);
     } finally {
-      await session.close();
+      
     }
   };
   const data = await PromisingFunction(query);
-  session.close();
+
   return data;
 }
 

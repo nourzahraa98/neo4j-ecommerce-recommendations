@@ -10,10 +10,10 @@ const useStyles = createStyles((theme) => ({
 
 const description = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque corporis nisi incidunt exercitationem doloremque qui iure nobis eligendi reiciendis similique possimus ipsum error ad commodi voluptatem dolores rerum, laudantium iusto!";
 
-export default function ProductCollapse({ isSkeleton }) {
+export default function ProductCollapse({ isSkeleton,data }) {
 
     const { classes } = useStyles();
-
+    console.table(data)
     return (
         <Box className={classes.wrapper}>
             <Accordion>
@@ -22,7 +22,7 @@ export default function ProductCollapse({ isSkeleton }) {
                         {isSkeleton ? <Skeleton height={20} width={"45%"} /> : "Description"}
                     </Accordion.Control>
                     <Accordion.Panel>
-                        {isSkeleton ? <><Skeleton height={13} width={"100%"} mb={10} /><Skeleton height={13} width={"45%"} /></> : description}
+                        {isSkeleton ? <><Skeleton height={13} width={"100%"} mb={10} /><Skeleton height={13} width={"45%"} /></> : data.description}
                     </Accordion.Panel>
                 </Accordion.Item>
 

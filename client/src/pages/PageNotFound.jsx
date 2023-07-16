@@ -46,9 +46,9 @@ export default function PageNotFound() {
     return (
         <Container className={classes.root}>
             <div className={classes.label}>404</div>
-            <Title className={classes.title}>Lorem ipsum dolor sit amet.</Title>
+            <Title className={classes.title} transform='uppercase'>Page Not Found</Title>
             <Text color="dimmed" size="lg" align="center" className={classes.description}>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dolores nihil modi, eius ipsa quia deserunt laborum cumque.
+               
             </Text>
             <Group position="center">
                 <Link to={'/'}>

@@ -12,8 +12,9 @@ import ProductDetails from "./ProductDetails";
 import ProductDetailsSkeleton from "./ProductDetailsSkeleton";
 import SettingsNav from "./Settings/SettingsNav";
 import ProfileInfoSettings from "./Settings/ProfileInfoSettings";
-import ShippingInfoSettings from "./Settings/ShippingInfoSettings";
+import AddShippingAddress from "./Settings/AddShippingAddress"; 
 import PasswordInfoSettings from "./Settings/PasswordInfoSettings";
+import ManageShippingAddress from "./Settings/ManageShippingAddress";
 import AdminNav from "./Admin/AdminNav";
 import ArchiveAndReport from "./Admin/ArchiveAndReport";
 import ContactAndSupport from "./Admin/ContactAndSupport";
@@ -26,7 +27,7 @@ export {
     NavBar, Footer, HeroHeader, ProductsCarousel, ProductsGrid,
     ProductCard, FeaturesSection, ProductCardSkeleton, ThemeSwitcher,
     ProductCollapse, ProductDetails, ProductDetailsSkeleton, SettingsNav,
-    ProfileInfoSettings, ShippingInfoSettings, PasswordInfoSettings,
+    ProfileInfoSettings, AddShippingAddress, PasswordInfoSettings,
     AdminNav, ArchiveAndReport, ContactAndSupport, InfosAndCharts,
-    ManageAccounts, ManageProducts, ManageOrders, ProductDetailsAdmin
+    ManageAccounts, ManageProducts, ManageOrders, ProductDetailsAdmin,ManageShippingAddress
 };

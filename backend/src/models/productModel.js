@@ -59,6 +59,7 @@ class Product {
     WITH DISTINCT p3, COUNT(DISTINCT otherUser) as similarity 
     ORDER BY similarity DESC
     RETURN p3 LIMIT 12`
+  
     const result = await RunQuery(query);
     return result.records.map((record) => record.get("p3"));
   }

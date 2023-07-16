@@ -9,42 +9,39 @@ import {
   Grid,
   Group,
   Image,
-  Radio,
   Text,
   Title,
   Tooltip,
   useMantineTheme,
 } from "@mantine/core";
-import { IconMinus, IconPlus, IconTrash } from "@tabler/icons";
-import image from "../assets/images/product-2.jpg";
+import { IconTrash } from "@tabler/icons";
 import { AuthContext } from "../context/AuthContext";
-import { useContext, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const CartPage = () => {
-  // we get the current user from the AuthContext
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
-  console.log(currentUser.id);
-  // we create a state to store the cart
   const [cart, setCart] = useState([]);
-  // we get the cart from the backend using the current user id
-  useEffect(() => {
-    getproducts();
-  }, []);
 
-  const getproducts = () => {
+  const getproducts = useCallback(async () => {
     axios
       .get(`http://localhost:4000/users/cart/${currentUser.id}`)
       .then((res) => {
         setCart(res.data);
+        
       })
       .catch((err) => {
         console.log(err);
       });
-  };
+  },[currentUser.id])
+
+  useEffect(() => {
+    getproducts();
+   
+  }, [getproducts]);
 
   const orderHandler = () => {
     axios
@@ -62,7 +59,7 @@ const CartPage = () => {
   return (
     <Container size={"lg"}>
       <Center>
-        <Title mb={"xl"}>Cart :</Title>
+        <Title mb={"xl"} transform="uppercase">Product Cart</Title>
       </Center>
       <Grid gutter={"xl"}>
         <Grid.Col
@@ -173,38 +170,26 @@ const CartPage = () => {
               <Title order={2} mb={25}>
                 Cart Total
               </Title>
-              <Text size={"md"} color="dimmed">
-                Subtotal :{" "}
+              <Text size={"sm"} transform="uppercase" color="dimmed">
+                Subtotal : {" "}
                 {cart.reduce(
-                  (acc, product) => acc + parseFloat(product.price),
+                  (acc, product) => acc + parseFloat(product.price.low),
                   0
                 )}
                 DA
               </Text>
-              <Text size={"md"} color="dimmed">
-                Elements : {cart.length}
+              <Text size={"sm"} color="dimmed" transform="uppercase">
+                Total Items :  {cart.reduce(
+                  (acc, product) => acc + parseFloat(product.quantity.low),
+                  0
+                )}
               </Text>
-              <Group position="left">
-                <Text size={"md"} color="dimmed">
-                  Shipping :{" "}
-                </Text>
-                <Radio.Group
-                  mt={35}
-                  orientation="vertical"
-                  spacing="sm"
-                  offset={"xl"}
-                  defaultValue="yalidin"
-                >
-                  <Radio value="yalidin" label="yalidin : 3000DA" />
-                  <Radio value="freeShiping" label="free shiping 0DA" />
-                  <Radio value="localPickup" label="local pickup 0DA" />
-                </Radio.Group>
-              </Group>
+              
               <Divider my={20} />
               <Text size={"md"} weight={500}>
                 Total :{" "}
                 {cart.reduce(
-                  (acc, product) => acc + parseFloat(product.price),
+                  (acc, product) => acc + parseFloat(product.price.low),
                   0
                 )}
                 DA

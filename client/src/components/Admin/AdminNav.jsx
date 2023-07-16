@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import logosvg from "../../assets/images/digital_easy_logo.svg"
 
 const useStyles = createStyles((theme, _params, getRef) => {
-    const icon = getRef('icon');
+    const icon = 'icon'
     return {
         navbar: {
             backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background,

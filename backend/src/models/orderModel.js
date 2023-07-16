@@ -42,12 +42,14 @@ class Order {
 	}
 
 	static async getByUser(userId) {
-		const query = `
-			MATCH (u:User)-[:PLACED_ORDER]->(o:Order) WHERE u.id = '${userId}'
-			RETURN o
+		const query = 	`MATCH (u:User { id: '${userId}' })-[:PLACED_ORDER]->(o:Order)-[i:INCLUDES]->(p:Product)
+		RETURN o, p,i
 		`;
 		const result = await RunQuery(query);
-		return result.records.map((record) => record.get("o"));
+		return result.records.map((record) => {
+		return {order:	record.get('o').properties,product : record.get('p').properties,rating : record.get('r').properties}
+		
+		});
 	}
 
 	static async delete(id) {
