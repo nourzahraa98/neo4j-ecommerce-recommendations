@@ -4,7 +4,7 @@ const User = require("../models/userModel");
 const get_all_orders = async (req, res) => {
 	Order.getAll()
 		.then((orders) => {
-			res.send(orders.map((order) => order.properties));
+			res.send(orders);
 		})
 		.catch((error) => {
 			res.status(500).send({ message: "Orders not found" });
@@ -25,7 +25,7 @@ const get_order_by_user = async (req, res) => {
 	Order.getByUser(req.params.id)
 		.then((order) => {
 			console.log(order);
-			res.send(order.properties);
+			res.send(order);
 		})
 		.catch((error) => {
 			res.status(500).send({ message: "product not found" });
@@ -33,12 +33,15 @@ const get_order_by_user = async (req, res) => {
 }
 
 const create_order = async (req, res) => {
-	const { userId } = req.body;
-	console.table({ userId });
-	const order = new Order(userId);
-	order.save(userId).then((result) => {
+	const { userId , shippingAddressId} = req.body;
+	console.table({ userId,shippingAddressId });
+	const order = new Order(userId,shippingAddressId);
+	order.save(userId,shippingAddressId).then((result) => {
+		
 		res.send(result);
+
 	}).catch((error) => {
+		console.log(error);
 		res.status(500).send({ message: "Error creating order" });
 	});
 }

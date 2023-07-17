@@ -26,7 +26,7 @@ class User {
   }
 
   static async addToCart(userId, productId, quantity) {
-    const query = `MATCH (u:User), (p:Product) WHERE u.id = '${userId}' AND p.id = '${productId}' CREATE (u)-[r:HAS_IN_CART {quantity: ${quantity}}]->(p) RETURN r`;
+    const query = `MATCH (u:User), (p:Product) WHERE u.id = '${userId}' AND p.id = '${productId}' CREATE (u)-[r:HAS_IN_CART {quantity: ${quantity} , id : '${uuidv4()}'}]->(p) RETURN r`;
     const result = await RunQuery(query);
     return result.records[0].get("r");
   }
@@ -39,10 +39,10 @@ class User {
       let product
       product = record.get("p").properties;
       product.quantity = record.get("r").properties.quantity;
-
+      product.cartId = record.get("r").properties.id
       products.push(product)
     });
-
+    console.log(products)
     return products
 
   }
@@ -141,6 +141,18 @@ class User {
     return result.records.map((record) => record.get("p3"));
   }
 
+  static async delete_item_from_cart(cartId){
+    const query = `
+    MATCH (u:User)-[r:HAS_IN_CART]->(p:Product)
+    WHERE r.id = '${cartId}'
+    DELETE r
+`;
+
+const result = await RunQuery(query);
+return result;
+
+  }
+
   static async add_shipping_address({
     userId,
     name,
@@ -162,7 +174,6 @@ class User {
 	RETURN u, a
 	`;
 
-	console.log(query)
     const result = await RunQuery(query);
 
     return  result.records.map((record) => record.get("a"));

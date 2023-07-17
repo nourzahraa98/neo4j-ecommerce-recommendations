@@ -100,12 +100,28 @@ const add_to_cart = async (req, res) => {
 const get_card_by_user_id = async (req, res) => {
   const products = User.get_products_incart(req.params.id)
     .then((products) => {
-      console.log(products)
       res.send(products);
     })
     .catch((error) => {
       res.status(500).send(error.message);
     });
+};
+
+
+const delete_carrt_item = async (req, res) => {
+  try {
+    await User.delete_item_from_cart(req.params.id)
+
+      .then((user) => {
+        res.send(user);
+      })
+      .catch((error) => {
+        console.log(error);
+        res.status(500).send(" not found");
+      });
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
 };
 
 const add_shipping_address = async (req, res) => {
@@ -130,6 +146,8 @@ const add_shipping_address = async (req, res) => {
     res.send(error.message);
   }
 };
+
+
 
 const get_shipping_address = async (req, res) => {
   try {
@@ -174,5 +192,6 @@ module.exports = {
   get_card_by_user_id,
   add_shipping_address,
   get_shipping_address,
-  delete_shipping_address
+  delete_shipping_address,
+  delete_carrt_item
 };

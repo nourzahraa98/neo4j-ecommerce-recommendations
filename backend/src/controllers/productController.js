@@ -75,9 +75,7 @@ const get_some_products = async (req, res) => {
 
 const get_recommandations = async (req, res) => {
   const id = req.params.id;
-  console.log(id)
   const a =await Product.get_recommandations(id)
-  console.log(a)
   Product.get_recommandations(id).then((arayofrecommandations) => {
     
     res.send(arayofrecommandations.map((product) => product.properties));
