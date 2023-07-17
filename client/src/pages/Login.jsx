@@ -63,6 +63,7 @@ const LoginPage = (props) => {
         .then((res) => {
           console.log("login successfull");
           dispatch({ type: "LOGIN", payload: res.data });
+          
           navigate("/");
         })
         .catch((err) => {

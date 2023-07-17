@@ -11,55 +11,149 @@ import {
   Image,
   Text,
   Title,
+  TextInput,
+  Radio,
   Tooltip,
   useMantineTheme,
 } from "@mantine/core";
-import { IconTrash } from "@tabler/icons";
+import { notifications } from '@mantine/notifications';
+import { IconCheck, IconTrash, IconX} from "@tabler/icons";
 import { AuthContext } from "../context/AuthContext";
 import { useCallback, useContext, useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { modals } from "@mantine/modals";
+import { API_BASE_URL } from "../constants";
 
 const CartPage = () => {
   const { currentUser } = useContext(AuthContext);
   const navigate = useNavigate();
   const [cart, setCart] = useState([]);
+  const [address, setAddress] = useState([]);
+  const [shippingAddress, setShippingAddress] = useState(0);
 
   const getproducts = useCallback(async () => {
     axios
-      .get(`http://localhost:4000/users/cart/${currentUser.id}`)
+      .get(`${API_BASE_URL}/users/cart/${currentUser.id}`)
       .then((res) => {
         setCart(res.data);
-        
       })
       .catch((err) => {
         console.log(err);
       });
-  },[currentUser.id])
+  }, [currentUser.id]);
+
+  const fetchUserShippingAddress = useCallback(async () => {
+    try {
+      const result = await axios.get(
+        `${API_BASE_URL}/users/shipping-address/${currentUser.id}`
+      );
+
+      setAddress(result.data);
+      setShippingAddress(result.data[0].id);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    }
+  }, [currentUser.id]);
 
   useEffect(() => {
     getproducts();
-   
-  }, [getproducts]);
+    fetchUserShippingAddress();
+  }, [fetchUserShippingAddress, getproducts]);
+
+
 
   const orderHandler = () => {
     axios
-      .post("http://localhost:4000/orders/checkout", { userId: currentUser.id })
+      .post(`${API_BASE_URL}/orders/checkout`, { userId: currentUser.id,shippingAddressId : shippingAddress })
       .then((res) => {
-        console.log("done" + currentUser.id);
+        notifications.show({
+          title: 'Order Placed Successfully',
+         icon: <IconCheck />,
+         withBorder : true,
+       
+      
+        })
         navigate("/");
       })
       .catch((err) => {
-        console.log("err");
+       
         console.log(err);
       });
   };
 
+  const openConfirmModal = () =>
+    modals.open({
+      title: "Select Shipping Address",
+      size: "lg",
+
+      children: (
+        <>
+          <Group position="right" mb={24}>
+            <Button
+              onClick={() => {
+                navigate("/settings/add-shipping-info");
+                modals.closeAll();
+              }}
+            >
+              Add New Address
+            </Button>
+          </Group>
+          <Grid spacing="sm">
+            {address.map((i, index) => (
+              <Grid.Col
+                my={"sm"}
+                key={i.id}
+                sx={(theme) => ({
+                  borderRadius: theme.radius.md,
+                  border: "1px solid #25262B",
+                  cursor: "pointer",
+                  background:
+                    i.id === shippingAddress
+                      ? theme.colorScheme == "light"
+                        ? "#cfcfcf"
+                        : "#25262B"
+                      : "transparent",
+                })}
+                p={"md"}
+                onClick={() => {
+                  setShippingAddress(i.id);
+                  modals.closeAll();
+                  notifications.show({
+                    title: 'Address Selected Successfully',
+                   icon: <IconCheck />,
+                   withBorder : true,
+                 
+                
+                  })
+                }}
+              >
+                <Text weight={600} size={"sm"} color={""}>
+                  {i.name}
+                </Text>
+                <Text weight={400} size={"sm"} color={"dimmed"}>
+                  {i.address +
+                    " " +
+                    i.city +
+                    " " +
+                    i.country +
+                    "- " +
+                    i.zipcode}
+                </Text>
+              </Grid.Col>
+            ))}
+          </Grid>
+        </>
+      ),
+    });
+
   return (
     <Container size={"lg"}>
       <Center>
-        <Title mb={"xl"} transform="uppercase">Product Cart</Title>
+        <Title mb={"xl"} transform="uppercase">
+          Product Cart
+        </Title>
       </Center>
       <Grid gutter={"xl"}>
         <Grid.Col
@@ -171,7 +265,7 @@ const CartPage = () => {
                 Cart Total
               </Title>
               <Text size={"sm"} transform="uppercase" color="dimmed">
-                Subtotal : {" "}
+                Subtotal :{" "}
                 {cart.reduce(
                   (acc, product) => acc + parseFloat(product.price.low),
                   0
@@ -179,12 +273,13 @@ const CartPage = () => {
                 DA
               </Text>
               <Text size={"sm"} color="dimmed" transform="uppercase">
-                Total Items :  {cart.reduce(
+                Total Items :{" "}
+                {cart.reduce(
                   (acc, product) => acc + parseFloat(product.quantity.low),
                   0
                 )}
               </Text>
-              
+
               <Divider my={20} />
               <Text size={"md"} weight={500}>
                 Total :{" "}
@@ -195,17 +290,22 @@ const CartPage = () => {
                 DA
               </Text>
             </Box>
-            <Button
-              onClick={() => orderHandler()}
-              disabled={cart.length === 0}
-              size="xl"
-              mt={30}
-              sx={(theme) => ({
-                width: "100%",
-              })}
-            >
-              PROCEED TO CHECKOUT
-            </Button>
+            <Group position="apart" p={"md"}>
+              <Button
+                onClick={openConfirmModal}
+                disabled={cart.length === 0}
+                mt={30}
+              >
+                SELECT ADDRESS
+              </Button>
+              <Button
+                onClick={orderHandler}
+                disabled={cart.length === 0}
+                mt={30}
+              >
+                CHECKOUT
+              </Button>
+            </Group>
           </Box>
         </Grid.Col>
       </Grid>
@@ -215,17 +315,31 @@ const CartPage = () => {
 
 function CartProduct({ product }) {
   const theme = useMantineTheme();
+  const navigate = useNavigate();
+
   const showWhenMd = (theme) => ({
     display: "none",
     [theme.fn.smallerThan("md")]: {
       display: "block",
     },
   });
+  const { currentUser } = useContext(AuthContext);
+
+
+  const deleteItem = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${API_BASE_URL}/users/cart/${id}`
+      );
+
+    } catch (error) {
+      console.error(error); // Handle the error
+    }
+  };
   return (
-    <Anchor
+    <Box
       color={theme.colorScheme === "dark" ? "white" : "black"}
-      component={Link}
-      to={`/product/${product.id}`}
+      
     >
       <Grid
         my={10}
@@ -248,11 +362,24 @@ function CartProduct({ product }) {
                 },
               })}
             >
-              <Tooltip label="delete this product">
-                <ActionIcon variant="outline">
-                  <IconTrash size={18} color="red" />{" "}
+              <Tooltip label="Delete this product">
+                <ActionIcon variant="outline" onClick={() => {
+                    deleteItem(product.cartId)
+                    navigate(0);
+                     notifications.show({
+                      title: 'Item Deleted Successfully',
+                      message: product.name,
+                      icon: <IconCheck />,
+                      withBorder : true,
+                   
+                  
+                    })
+                  }}>
+                  <IconTrash size={18} color="red"  />{" "}
                 </ActionIcon>
               </Tooltip>
+              <Anchor component={Link}
+      to={`/product/${product.id}`}>
               <Image
                 width={70}
                 height={70}
@@ -260,6 +387,7 @@ function CartProduct({ product }) {
                 src={product.image}
                 alt={product.name}
               />
+              </Anchor>
             </Group>
             <Box
               sx={(theme) => ({
@@ -289,6 +417,9 @@ function CartProduct({ product }) {
                 <Text weight={700} sx={showWhenMd}>
                   PRICE:
                 </Text>
+                <Text weight={700} size={'sm'}>
+                
+                {product.price.low}{" "}DA  </Text>
               </Group>
             </Grid.Col>
             <Grid.Col xs={12} md={4}>
@@ -299,13 +430,13 @@ function CartProduct({ product }) {
                 <Text weight={700} sx={showWhenMd}>
                   TOTAL:
                 </Text>
-                {1}
+                {product.quantity.low}
               </Group>
             </Grid.Col>
           </Grid>
         </Grid.Col>
       </Grid>
-    </Anchor>
+    </Box>
   );
 }
 

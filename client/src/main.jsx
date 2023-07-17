@@ -5,6 +5,8 @@ import './index.css';
 import { MantineProvider, ColorSchemeProvider } from '@mantine/core';
 import { useColorScheme } from "@mantine/hooks";
 import { AuthContextProvider } from "./context/AuthContext";
+import { ModalsProvider } from '@mantine/modals';
+import { Notifications } from '@mantine/notifications';
 /*
 <React.StrictMode>
     <Application />
@@ -23,9 +25,12 @@ function Application() {
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={{ colorScheme: colorScheme, primaryColor: "violet" }} withGlobalStyles withNormalizeCSS>
+        <ModalsProvider>
+          <Notifications position="top-right" zIndex={2077}/>
         <AuthContextProvider>
           <App />
         </AuthContextProvider>
+        </ModalsProvider>
       </MantineProvider>
     </ColorSchemeProvider>
   );
