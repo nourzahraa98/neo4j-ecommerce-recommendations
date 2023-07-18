@@ -109,7 +109,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
 });
 
 const data = [
-  { link: "change-profile-info", label: "Change Profile Info", icon: IconUser },
+  { link: "", label: "Change Profile Info", icon: IconUser },
   { link: "change-password", label: "Change Password", icon: IconKey },
   {
     link: "manage-shipping-info",

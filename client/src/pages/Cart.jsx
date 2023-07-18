@@ -336,6 +336,7 @@ function CartProduct({ product }) {
       console.error(error); // Handle the error
     }
   };
+  console.log(product.cartId)
   return (
     <Box
       color={theme.colorScheme === "dark" ? "white" : "black"}

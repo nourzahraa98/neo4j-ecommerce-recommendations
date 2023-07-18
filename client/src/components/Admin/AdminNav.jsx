@@ -5,98 +5,99 @@ import { Link } from 'react-router-dom';
 import logosvg from "../../assets/images/digital_easy_logo.svg"
 
 const useStyles = createStyles((theme, _params, getRef) => {
-    const icon = 'icon'
+    const icon = "icon";
+   
     return {
-        navbar: {
-            backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background,
-            overflow: 'auto',
-            width: '25%',
-            [theme.fn.smallerThan("md")]: {
-                width: '100%',
-            },
+      navbar: {
+        backgroundColor: '#25262B',
+      
+        overflow: "auto",
+        width: "25%",
+        [theme.fn.smallerThan("md")]: {
+          width: "100%",
         },
-
-        header: {
-            paddingBottom: theme.spacing.md,
-            marginBottom: theme.spacing.md * 1.5,
-            borderBottom: `1px solid ${theme.fn.lighten(
-                theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background, 0.1
-            )}`,
+      },
+  
+      header: {
+        paddingBottom: theme.spacing.md,
+        marginBottom: theme.spacing.md * 1.5,
+        borderBottom: `1px solid #696969 `
+      },
+  
+      username: {
+        color: theme.colors.gray[0],
+        [theme.fn.smallerThan("lg")]: {
+          display: "none",
         },
-
-
-
-        username: {
-            color: theme.colors.gray[0],
-            [theme.fn.smallerThan("lg")]: {
-                display: "none"
-            },
-            [theme.fn.smallerThan("md")]: {
-                display: "block"
-            }
+        [theme.fn.smallerThan("md")]: {
+          display: "block",
         },
-
-        profileGroup: {
-            borderRadius: theme.radius.sm,
-            '&:hover': {
-                backgroundColor: theme.fn.lighten(
-                    theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background, 0.1
-                ),
-            },
+      },
+  
+      profileGroup: {
+        borderRadius: theme.radius.sm,
+        "&:hover": {
+          backgroundColor: theme.fn.lighten(
+            theme.fn.variant({ variant: "filled", color: theme.primaryColor })
+              .background,
+            0.1
+          ),
         },
-
-
-        footer: {
-            paddingTop: theme.spacing.md,
-            marginTop: theme.spacing.md,
-            borderTop: `1px solid ${theme.fn.lighten(
-                theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background, 0.1
-            )}`,
+      },
+  
+      footer: {
+        paddingTop: theme.spacing.md,
+        marginTop: theme.spacing.md,
+        borderTop: `1px solid #696969 `,
+      },
+  
+      link: {
+        ...theme.fn.focusStyles(),
+        padding: '16px',
+        marginTop: '10px',
+        display: "flex",
+        alignItems: "center",
+        textDecoration: "none",
+        fontSize: theme.fontSizes.sm,
+        color: theme.white,
+        borderRadius: theme.radius.sm,
+        fontWeight: 500,
+  
+        "&:hover": {
+          backgroundColor: theme.fn.lighten(
+            theme.fn.variant({ variant: "filled", color: theme.primaryColor })
+              .background,
+            0.15
+          ),
+          [`& .${icon}`]: { opacity: 0.9 },
         },
-
-        link: {
-            ...theme.fn.focusStyles(),
-            display: 'flex',
-            alignItems: 'center',
-            textDecoration: 'none',
-            fontSize: theme.fontSizes.sm,
-            color: theme.white,
-            padding: `${theme.spacing.xs}px ${theme.spacing.sm}px`,
-            borderRadius: theme.radius.sm,
-            fontWeight: 500,
-
-            '&:hover': {
-                backgroundColor: theme.fn.lighten(
-                    theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background, 0.1
-                ),
-            },
+      },
+  
+      linkIcon: {
+        ref: icon,
+        
+        color: theme.white,
+        opacity: 0.75,
+        marginRight: theme.spacing.sm,
+      },
+  
+      linkActive: {
+        "&, &:hover": {
+          backgroundColor: theme.fn.lighten(
+            theme.fn.variant({ variant: "filled", color: theme.primaryColor })
+              .background,
+            0.15
+          ),
+          [`& .${icon}`]: { opacity: 0.9 }
         },
-
-        linkIcon: {
-            ref: icon,
-            color: theme.white,
-            opacity: 0.75,
-            marginRight: theme.spacing.sm,
-        },
-
-        linkActive: {
-            '&, &:hover': {
-                backgroundColor: theme.fn.lighten(
-                    theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background, 0.15
-                ),
-                [`& .${icon}`]: { opacity: 0.9 },
-            },
-        },
+      },
     };
-});
-
+  });
 const data = [
     { link: 'information-and-chart', label: 'Info and Charts', icon: IconChartDots },
     { link: 'manage-orders', label: 'Manage Orders', icon: IconListCheck },
     { link: 'manage-products', label: 'Manage Products', icon: IconBox },
-    { link: 'manage-accounts', label: 'Manage Accounts', icon: IconUsers },
-    { link: 'contact-and-support', label: 'Contact and Support', icon: IconMessages },
-    { link: 'archive-and-report', label: 'Archive and Report', icon: IconArchive },
+   
 ];
 
 /*

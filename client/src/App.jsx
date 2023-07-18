@@ -98,7 +98,7 @@ function App() {
             }
           >
             <Route
-              path="change-profile-info"
+            index
               element={<ProfileInfoSettings />}
             />
             <Route path="add-shipping-info" element={<AddShippingAddress />} />
