@@ -49,6 +49,7 @@ export default function SettingsPage() {
             <SettingsNav user={user ? user : currentUser} />
             <Container size={"xl"} className={classes.container} m={0} py={"xl"} px={0}>
                 <Center>
+                    
                     <Outlet />
                 </Center>
             </Container>

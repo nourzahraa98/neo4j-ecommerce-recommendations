@@ -46,6 +46,20 @@ const create_order = async (req, res) => {
 	});
 }
 
+const update_order_status = async (req, res) => {
+	const { order , product, status } = req.body;
+
+	Order.updateOrderStatus(order, product, status).then((result) => {
+		
+		res.send(result);
+
+	}).catch((error) => {
+		console.log(error);
+		res.status(500).send({ message: "Error creating order" });
+	});
+}
+
+
 const rate_product = async (req, res) => {
 	const { userId, productId, rating } = req.body;
 	Order.rate(userId, productId, rating).then((result) => {
@@ -74,5 +88,5 @@ module.exports = {
 	create_order,
 	rate_product,
 	gen_recommendations,
-	get_order_by_user
+	get_order_by_user,update_order_status
 }

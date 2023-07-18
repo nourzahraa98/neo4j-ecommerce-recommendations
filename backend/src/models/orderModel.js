@@ -8,25 +8,26 @@ class Order {
 
   async save() {
     const query1 = `
-		MATCH (u:User {id: '${this.userId}'})-[r:HAS_IN_CART]->(p:Product)
-  WITH collect(p) AS products, u
-  CREATE (o:Order {id: '${uuidv4()}', date: datetime()})
-  CREATE (u)-[:PLACED_ORDER]->(o)
-  FOREACH (product IN products | CREATE (o)-[:INCLUDES]->(product))
-  WITH o
-  MATCH (a:ShippingAddress {id: '${this.shippingAddressId}'})
-  CREATE (o)-[:WITH_SHIPPING_ADDRESS]->(a)
-  RETURN o`;
+    MATCH (u:User {id: '${this.userId}'})-[r:HAS_IN_CART]->(p:Product)
+WITH collect(p) AS products, u
+CREATE (o:Order {id: '${uuidv4()}', date: datetime()})
+CREATE (u)-[:PLACED_ORDER]->(o)
+FOREACH (product IN products |
+  CREATE (o)-[:INCLUDES]->(product)
+  CREATE (o)-[:STATUS {status: 'WAITING FOR CONFIRMATION'}]->(product)
+)
+WITH o
+MATCH (a:ShippingAddress {id: '${this.shippingAddressId}'})
+CREATE (o)-[:WITH_SHIPPING_ADDRESS]->(a)
+RETURN o`;
     const query2 = `
 		MATCH (u:User {id: '${this.userId}'})-[r:HAS_IN_CART]->(p:Product)
 		DELETE r`;
 
     const result1 = await RunQuery(query1)
       .then(async (result) => {
-       
-		const result2 = await RunQuery(query2)
+        const result2 = await RunQuery(query2)
           .then((result) => {
-			
             return result;
           })
           .catch((err) => {
@@ -39,33 +40,32 @@ class Order {
   }
 
   static async getAll() {
-	const query = `
+    const query = `
 	MATCH (u:User)-[:PLACED_ORDER]->(o:Order)
 	 MATCH (o)-[:INCLUDES]->(p:Product)
 	 MATCH (o)-[:WITH_SHIPPING_ADDRESS]->(a:ShippingAddress)
 	RETURN o, collect(p) AS products, u, a
 	`;
-	
-	const result = await RunQuery(query);
-	const res = []
-	result.records.map((record) => {
-		
-	  const order = record.get("o");
-	  const products = record.get("products");
-	  const user = record.get("u");
-	  const address = record.get("a");
-    
-	  res.push( {
-		order: order.properties,
-		products: products.map((product) => product.properties),
-		user: user.properties,
-		address: address.properties,
-	  })
-	});
-    console.log(res)
-	return res
+
+    const result = await RunQuery(query);
+    const res = [];
+    result.records.map((record) => {
+      const order = record.get("o");
+      const products = record.get("products");
+      const user = record.get("u");
+      const address = record.get("a");
+      delete user.properties.password;
+
+      res.push({
+        order: order.properties,
+        products: products.map((product) => product.properties),
+        user: user.properties,
+        address: address.properties,
+      });
+    });
+    console.log(res);
+    return res;
   }
-  
 
   static async getOne(id) {
     const query = `MATCH (n:Order) WHERE n.id = '${id}' RETURN n`;
@@ -75,35 +75,39 @@ class Order {
   }
 
   static async getByUser(userId) {
-    const query = ` MATCH (u:User {id: '${userId}'})-[:PLACED_ORDER]->(o:Order)
-	MATCH (o)-[:INCLUDES]->(p:Product)
-	MATCH (o)-[:WITH_SHIPPING_ADDRESS]->(a:ShippingAddress)
-	RETURN o, collect(p) AS products, u, a
-		`;
+    const query = `
+    MATCH (u:User {id: '${userId}'})-[:PLACED_ORDER]->(o:Order)-[:INCLUDES]->(p:Product)
+MATCH (o)-[:WITH_SHIPPING_ADDRESS]->(a:ShippingAddress)
+MATCH (o)-[s:STATUS]->(p)
+RETURN p, o, a, u, s
+  `;
     const result = await RunQuery(query);
-	const res = []
-	result.records.map((record) => {
-		
-	  const order = record.get("o");
-	  const products = record.get("products");
-	  const user = record.get("u");
-	  const address = record.get("a");
-    
-	  res.push( {
-		order: order.properties,
-		products: products.map((product) => product.properties),
-		user: user.properties,
-		address: address.properties,
-	  })
-	});
-    console.log(res)
-	return res
+    return result.records.map((record) => {
+      const product = record.get("p").properties;
+      const order = record.get("o").properties;
+      const address = record.get("a").properties;
+      const status = record.get("s").properties.status;
+
+      return { product, order, address, status };
+    });
   }
 
   static async delete(id) {
     const query = `MATCH (n:Order) WHERE n.id = '${id}' DELETE n`;
     const result = await RunQuery(query);
     return `Delete operation for order ${id} ended successfully`;
+  }
+
+  static async updateOrderStatus(order, product, status) {
+    const query = `
+   MATCH (o:Order {id: '${order}'})-[:INCLUDES]->(p:Product {id: '${product}'})
+  MATCH (o)-[s:STATUS]->(p)
+  SET s.status = '${status}'
+  RETURN o
+   `;
+
+   const result = await RunQuery(query);
+   return result;
   }
 
   static async rate(userId, productId, rating) {

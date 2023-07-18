@@ -15,6 +15,7 @@ import ProfileInfoSettings from "./Settings/ProfileInfoSettings";
 import AddShippingAddress from "./Settings/AddShippingAddress"; 
 import PasswordInfoSettings from "./Settings/PasswordInfoSettings";
 import ManageShippingAddress from "./Settings/ManageShippingAddress";
+import OrderHistory from "./Settings/OrderHistory";
 import AdminNav from "./Admin/AdminNav";
 import ArchiveAndReport from "./Admin/ArchiveAndReport";
 import ContactAndSupport from "./Admin/ContactAndSupport";
@@ -29,5 +30,5 @@ export {
     ProductCollapse, ProductDetails, ProductDetailsSkeleton, SettingsNav,
     ProfileInfoSettings, AddShippingAddress, PasswordInfoSettings,
     AdminNav, ArchiveAndReport, ContactAndSupport, InfosAndCharts,
-    ManageAccounts, ManageProducts, ManageOrders, ProductDetailsAdmin,ManageShippingAddress
+    ManageAccounts, ManageProducts, ManageOrders, ProductDetailsAdmin,ManageShippingAddress,OrderHistory
 };
