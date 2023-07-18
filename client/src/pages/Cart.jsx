@@ -100,7 +100,8 @@ const CartPage = () => {
               Add New Address
             </Button>
           </Group>
-          <Grid spacing="sm">
+          {address ?
+          (<Grid spacing="sm">
             {address.map((i, index) => (
               <Grid.Col
                 my={"sm"}
@@ -143,7 +144,7 @@ const CartPage = () => {
                 </Text>
               </Grid.Col>
             ))}
-          </Grid>
+          </Grid>) : <></>}
         </>
       ),
     });
