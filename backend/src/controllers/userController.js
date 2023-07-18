@@ -23,9 +23,13 @@ const register_user = async (req, res) => {
   const { email, password, region, name } = req.body;
   try {
     const user = new User(email, password, region, name);
-    await user.save();
-    console.log(user);
-    res.send(user);
+    u = await user.save();
+    console.log(u);
+    res.send({
+      email: u.email,
+      id: u.id,
+      name: u.name,
+    });
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -47,9 +51,11 @@ const get_all_users = async (req, res) => {
 
 const get_one_user = async (req, res) => {
   try {
+    console.log(req.params)
     await User.getOne(req.params.id)
-
+      
       .then((user) => {
+        console.log(user)
         res.send(user.properties);
       })
       .catch((error) => {

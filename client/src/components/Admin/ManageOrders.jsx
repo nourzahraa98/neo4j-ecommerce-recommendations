@@ -1,8 +1,11 @@
 import { ActionIcon, Avatar, Container, createStyles, Group, ScrollArea, Table } from "@mantine/core";
 import { IconChevronLeft } from "@tabler/icons";
-import { useState } from "react";
 import profuctImage from '../../assets/images/product-2.jpg'
-
+import { IconCaretDown, IconTrash } from "@tabler/icons";
+import { useState, useContext, useEffect, useCallback } from "react";
+import axios from "axios";
+import { API_BASE_URL } from "../../constants";
+import { Link, useNavigate } from "react-router-dom";
 const useStyles = createStyles((theme) => ({
     header: {
         paddingBottom: theme.spacing.md,
@@ -40,10 +43,43 @@ const useStyles = createStyles((theme) => ({
     }
 }));
 
+const parseDate = (neo4jDateTime) => {
+    const { year, month, day, hour, minute, second, nanosecond } = neo4jDateTime;
+  
+    const date = new Date(
+      year.low,
+      month.low - 1, // neo4j dates start at 1, js dates start at 0
+      day.low,
+      hour.low,
+      minute.low,
+     
+    );
+  
+    return date.toLocaleString();
+  };
+
 export default function ManageOrders() {
 
     const { classes, cx } = useStyles();
     const [scrolled, setScrolled] = useState(false);
+    const [orders, setOrders] = useState([]);
+    const fetchUserShippingAddress = useCallback(async () => {
+      try {
+        const result = await axios.get(
+          `${API_BASE_URL}/orders`
+        );
+  
+        setOrders(result.data);
+        console.log(result.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    }, []);
+  
+    useEffect(() => {
+      fetchUserShippingAddress();
+    }, [fetchUserShippingAddress]);
+  
 
     const rows = data.map((row, _index) => (
         <tr key={_index}>

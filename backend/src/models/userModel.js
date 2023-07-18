@@ -22,7 +22,9 @@ class User {
     }', password: '${this.password}', name : '${this.name}' , region: '${
       this.region
     }'}) RETURN n`;
-    await RunQuery(createQuery);
+    const user = await RunQuery(createQuery);
+    const a = user.records[0].get('n')
+    return  a.properties
   }
 
   static async addToCart(userId, productId, quantity) {
@@ -54,6 +56,7 @@ class User {
   }
 
   static async getOne(id) {
+    console.log(id)
     const query = `MATCH (n:User) WHERE n.id = '${id}' RETURN n`;
     const result = await RunQuery(query);
 
