@@ -41,30 +41,24 @@ RETURN o`;
 
   static async getAll() {
     const query = `
-	MATCH (u:User)-[:PLACED_ORDER]->(o:Order)
-	 MATCH (o)-[:INCLUDES]->(p:Product)
-	 MATCH (o)-[:WITH_SHIPPING_ADDRESS]->(a:ShippingAddress)
-	RETURN o, collect(p) AS products, u, a
+    MATCH (u:User)-[:PLACED_ORDER]->(o:Order)-[:INCLUDES]->(p:Product)
+  MATCH (o)-[:WITH_SHIPPING_ADDRESS]->(a:ShippingAddress)
+  MATCH (o)-[s:STATUS]->(p)
+  RETURN p, o, a, u, s
+  ORDER BY o.date DESC
 	`;
 
     const result = await RunQuery(query);
     const res = [];
-    result.records.map((record) => {
-      const order = record.get("o");
-      const products = record.get("products");
-      const user = record.get("u");
-      const address = record.get("a");
-      delete user.properties.password;
-
-      res.push({
-        order: order.properties,
-        products: products.map((product) => product.properties),
-        user: user.properties,
-        address: address.properties,
-      });
+    return result.records.map((record) => {
+      const product = record.get("p").properties;
+      const order = record.get("o").properties;
+      const address = record.get("a").properties;
+      const status = record.get("s").properties.status;
+      const user = record.get("u").properties;
+      delete user.password;
+      return { product, order, address, status, user };
     });
-    console.log(res);
-    return res;
   }
 
   static async getOne(id) {
@@ -77,9 +71,12 @@ RETURN o`;
   static async getByUser(userId) {
     const query = `
     MATCH (u:User {id: '${userId}'})-[:PLACED_ORDER]->(o:Order)-[:INCLUDES]->(p:Product)
-MATCH (o)-[:WITH_SHIPPING_ADDRESS]->(a:ShippingAddress)
-MATCH (o)-[s:STATUS]->(p)
-RETURN p, o, a, u, s
+    MATCH (o)-[:WITH_SHIPPING_ADDRESS]->(a:ShippingAddress)
+    MATCH (o)-[s:STATUS]->(p)
+    OPTIONAL MATCH (p)<-[:FOR_PRODUCT]-(r:Rating)
+    WITH p, o, a, u, s, COLLECT(r) AS ratings
+    RETURN p, o, a, u, s, ratings
+    
   `;
     const result = await RunQuery(query);
     return result.records.map((record) => {
@@ -87,8 +84,9 @@ RETURN p, o, a, u, s
       const order = record.get("o").properties;
       const address = record.get("a").properties;
       const status = record.get("s").properties.status;
-
-      return { product, order, address, status };
+      const rating = record.get("ratings") ? record.get("ratings").map(r => {return r.properties}) : null
+     console.log(record.get("ratings"))
+      return { product, order, address, status,rating };
     });
   }
 
@@ -106,16 +104,21 @@ RETURN p, o, a, u, s
   RETURN o
    `;
 
-   const result = await RunQuery(query);
-   return result;
+    const result = await RunQuery(query);
+    return result;
   }
 
-  static async rate(userId, productId, rating) {
+  static async rate({user,rating,product,feedback,order}) {
     const query = `
-		MATCH (u:User {id: '${userId}'})-[:PLACED_ORDER]->(o:Order)-[r:INCLUDES]->(p:Product {id: '${productId}'})
-		SET r.rating = ${rating}
-		RETURN r`;
+		MATCH (u:User {id: '${user}'})-[:PLACED_ORDER]->(o:Order)-[:INCLUDES]->(p:Product {id: '${product}'})
+  CREATE (r:Rating {rating: ${rating}})
+  SET r.feedback = '${feedback || ""}'
+  MERGE (r)-[:FOR_PRODUCT]->(p)
+  MERGE (u)-[:GAVE_RATING]->(r)
+  RETURN r, o, p, u
+  `;
     const result = await RunQuery(query);
+    console.log(result.records[0].get('u'));
     return result.records[0].get("r");
   }
 

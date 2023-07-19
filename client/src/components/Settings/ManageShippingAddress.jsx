@@ -6,7 +6,7 @@ import {
   Group,
   Button,
   Text,
-  Tooltip,
+  Tooltip,ScrollArea,
   ActionIcon,
 } from "@mantine/core";
 import { IconTrash } from "@tabler/icons";
@@ -31,6 +31,8 @@ const useStyles = createStyles((theme) => {
 export default function ManageShippingAddress() {
   const { classes } = useStyles();
   const navigate = useNavigate();
+  const [scrolled, setScrolled] = useState(false);
+
   const { currentUser } = useContext(AuthContext);
   const [address, setAddress] = useState([]);
 
@@ -75,6 +77,7 @@ export default function ManageShippingAddress() {
           Add New Address
         </Button>
       </Group>
+      <ScrollArea sx={{ height: "70vh" }} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
       <Grid
         mb={"md"}
         
@@ -123,6 +126,7 @@ export default function ManageShippingAddress() {
           </Grid.Col>
         ))}
       </Grid>
+      </ScrollArea>
     </Box>
   );
 }

@@ -1,6 +1,4 @@
-import { Container, Box, Button, Title, Group, Badge } from "@mantine/core";
-import { useToggle } from "@mantine/hooks";
-
+import { Container, Box, Title, Group, Badge } from "@mantine/core";
 import {
   ProductsGrid,
   ProductDetails,
@@ -13,21 +11,28 @@ import axios from "axios";
 const ProductPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+
   const fetchProducts = useCallback(async () => {
-    const result = await axios.get(`http://localhost:4000/products/${id}`);
-    console.table(result.data);
-    setProduct(result.data);
+    try {
+      const result = await axios.get(`http://localhost:4000/products/${id}`);
+      console.log(result.data)
+      setProduct(result.data); // Assuming the product data is nested under the "product" key
+    } catch (error) {
+      console.log("Error:", error);
+      // Handle the error, such as displaying an error message or fallback data
+    }
   }, [id]);
 
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
 
+
   return (
-    <Container size={"xl"}>
+    <Container size="xl">
       {product ? (
         <Badge color="cyan" size="xs" mt={4} ml={10}>
-          {product.category}
+          {product.product ? product.product.category : null}
         </Badge>
       ) : (
         <></>
@@ -39,16 +44,14 @@ const ProductPage = () => {
       </Group>
 
       {product ? (
-        <>
-          <ProductDetails data={product} />
-        </>
+        <ProductDetails data={product} />
       ) : (
         <ProductDetailsSkeleton />
       )}
       <Box mt={70} m={0} p={0}>
         <ProductsGrid
-          text="RECOMMANDATIONS 2"
-          useRecommandation={true}
+          text="RECOMMENDATIONS"
+          useRecommandation={false}
           ProductsNumber={4}
         />
       </Box>

@@ -46,9 +46,9 @@ const ProductDetails = ({ data }) => {
   const addToCartHandeler = () => {
     setLoading(true);
     axios
-      .post("http://localhost:5000/users/addtocart", {
+      .post("http://localhost:4000/users/addtocart", {
         userId: currentUser.id,
-        productId: data.id,
+        productId: data.product.id,
         quantity: 1,
       })
       .then((res) => {
@@ -61,10 +61,15 @@ const ProductDetails = ({ data }) => {
       });
   };
 
-  const items = [
-    { title: "DIGITAL-EASY", href: `/product/${data.id}` },
-    { title: data.brand, href: `/product/${data.id}` },
-    { title: data.cpu, href: `/product/${data.id}` },
+
+
+ 
+let items = []
+ 
+   items = [
+    { title: "DIGITAL-EASY", href: `/product/${data.product.id}` },
+    { title: data.product.brand, href: `/product/${data.product.id}` },
+    { title: data.product.cpu, href: `/product/${data.product.id}` },
   ].map((item, index) => (
     <Anchor
       href={item.href}
@@ -82,9 +87,9 @@ const ProductDetails = ({ data }) => {
 
   return (
     <>
-      {data ? (
+      {data  ? (
         <Grid p={0} m={0}>
-          {is_md ? <ProductGallery image={data.image} /> : null}
+          {is_md ? <ProductGallery image={data.product.image} /> : null}
 
           <Grid.Col sm={12} lg={6}>
             <Breadcrumbs
@@ -96,16 +101,16 @@ const ProductDetails = ({ data }) => {
             >
               {items}
             </Breadcrumbs>
-            {!is_md ? <ProductGallery image={data.image} /> : null}
+            {!is_md ? <ProductGallery image={data.product.image} /> : null}
 
             <Title mb={20} weight={400} order={2}>
-              {data.brand + " " + data.cpu}
+              {data.product.brand + " " + data.product.cpu}
             </Title>
             <Badge size="xl" variant="outline">
-              {data.price.low} {"DA"}
+              {data.product.price.low} {"DA"}
             </Badge>
             <Grid my={10} px={isMobile ? 20 :10}  >
-              {Object.keys(data).map((key, index) => {
+              {Object.keys(data.product).map((key, index) => {
                 if (!unwantedFields.includes(key)) {
                   return (
                     <Col span={span}   key={index}>
@@ -115,7 +120,7 @@ const ProductDetails = ({ data }) => {
                         </Text>
                         <Text weight={900} size="xs" align="center">
                             
-                          { data[key]}
+                          { data.product[key]}
                         </Text>
                         
                       </Card>
@@ -158,7 +163,7 @@ const ProductDetails = ({ data }) => {
                 </ActionIcon>
               </Tooltip>
             </Group>
-            <ProductCollapse data={data} isSkeleton={false} />
+            <ProductCollapse data={data} isSkeleton={data ? false : true} />
           </Grid.Col>
         </Grid>
       ) : (

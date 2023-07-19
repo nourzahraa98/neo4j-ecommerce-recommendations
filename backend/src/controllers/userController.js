@@ -2,12 +2,14 @@ const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 
 const login_user = async (req, res) => {
+  
   const { email, password } = req.body;
   try {
     const user = await User.getByEmail(email);
     console.log(user);
     if (!user) throw new Error("Invalid email or password");
     const valid = await bcrypt.compare(password, user.properties.password);
+    console.log(valid);
     if (!valid) throw new Error("Invalid email or password");
     res.send({
       email: user.properties.email,
@@ -15,6 +17,7 @@ const login_user = async (req, res) => {
       name: user.properties.name,
     });
   } catch (error) {
+    console.log(error)
     res.status(500).send(error.message);
   }
 };

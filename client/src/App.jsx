@@ -31,6 +31,7 @@ import {
   ManageProducts,
   ManageOrders,
   ProductDetailsAdmin,
+  RateProject,
 } from "./components/_index";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "./context/AuthContext";
@@ -90,6 +91,14 @@ function App() {
           />
           <Route path="search" element={<SearchPage />} />
           <Route
+            path="rate-product"
+            element={
+              <RequireAuth>
+                <RateProject />
+              </RequireAuth>
+            }
+          />
+          <Route
             path="settings"
             element={
               <RequireAuth>
@@ -97,10 +106,7 @@ function App() {
               </RequireAuth>
             }
           >
-            <Route
-            index
-              element={<ProfileInfoSettings />}
-            />
+            <Route index element={<ProfileInfoSettings />} />
             <Route path="add-shipping-info" element={<AddShippingAddress />} />
             <Route
               path="manage-shipping-info"

@@ -3,7 +3,7 @@ const Product = require("../models/productModel");
 const get_all_products = async (req, res) => {
   Product.getAll()
     .then((products) => {
-      res.send(products.map((product) => product.properties));
+      res.send(products);
     })
     .catch((error) => {
       res.status(500).send({ message: "products not found" });
@@ -13,7 +13,8 @@ const get_all_products = async (req, res) => {
 const get_product_by_id = async (req, res) => {
   await Product.getOne(req.params.id)
     .then((product) => {
-      res.send(product.properties);
+      
+      res.send(product[0]);
     })
     .catch((error) => {
       res.status(500).send({ message: "product not found" });
@@ -66,7 +67,8 @@ const get_some_products = async (req, res) => {
   const limit = req.params.limit;
   Product.getAll()
     .then((products) => {
-      res.send(products.map((product) => product.properties).slice(0, limit));
+      console.log(products.length);
+      res.send(products.slice(0, limit));
     })
     .catch((error) => {
       res.status(500).send({ message: "products not found" });

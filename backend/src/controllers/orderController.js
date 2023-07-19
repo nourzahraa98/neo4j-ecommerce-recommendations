@@ -24,7 +24,6 @@ const get_order_by_id = async (req, res) => {
 const get_order_by_user = async (req, res) => {
 	Order.getByUser(req.params.id)
 		.then((order) => {
-			console.log(order);
 			res.send(order);
 		})
 		.catch((error) => {
@@ -61,10 +60,13 @@ const update_order_status = async (req, res) => {
 
 
 const rate_product = async (req, res) => {
-	const { userId, productId, rating } = req.body;
-	Order.rate(userId, productId, rating).then((result) => {
+	const { user, product, rating,order,feedback } = req.body;
+	console.log(req.body);
+	Order.rate({user : user, product : product, rating : rating, order : order, feedback : feedback}).then((result) => {
+		console.log(result);
 		res.send(result);
 	}).catch((error) => {
+		console.log(error);
 		res.status(500).send({ message: "Error rating product" });
 	});
 }

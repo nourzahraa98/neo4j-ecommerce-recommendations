@@ -16,6 +16,7 @@ import AddShippingAddress from "./Settings/AddShippingAddress";
 import PasswordInfoSettings from "./Settings/PasswordInfoSettings";
 import ManageShippingAddress from "./Settings/ManageShippingAddress";
 import OrderHistory from "./Settings/OrderHistory";
+import RateProject from "./Settings/RateTheProject";
 import AdminNav from "./Admin/AdminNav";
 import ArchiveAndReport from "./Admin/ArchiveAndReport";
 import ContactAndSupport from "./Admin/ContactAndSupport";
@@ -28,7 +29,7 @@ export {
     NavBar, Footer, HeroHeader, ProductsCarousel, ProductsGrid,
     ProductCard, FeaturesSection, ProductCardSkeleton, ThemeSwitcher,
     ProductCollapse, ProductDetails, ProductDetailsSkeleton, SettingsNav,
-    ProfileInfoSettings, AddShippingAddress, PasswordInfoSettings,
+    ProfileInfoSettings, AddShippingAddress, PasswordInfoSettings,RateProject,
     AdminNav, ArchiveAndReport, ContactAndSupport, InfosAndCharts,
     ManageAccounts, ManageProducts, ManageOrders, ProductDetailsAdmin,ManageShippingAddress,OrderHistory
 };

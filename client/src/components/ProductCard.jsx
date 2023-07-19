@@ -14,7 +14,7 @@ export default function ProductCard({ data }) {
     axios
       .post("http://localhost:4000/users/addtocart", {
         userId: currentUser.id,
-        productId: data.id,
+        productId: data.product.id,
         quantity: 1
       })
       .then((res) => {
@@ -24,25 +24,25 @@ export default function ProductCard({ data }) {
         console.log(err);
       });
   };
- 
+   console.log(data)
   return (
     <Card shadow="sm" p="lg" radius="md" withBorder>
       {data && typeof data === "object" ? (
-        <Anchor component={Link} to={`/product/${data.id}`}>
+        <Anchor component={Link} to={`/product/${data.product.id}`}>
           <Card.Section>
-            <Image src={data.image} height={160} alt="image" />
+            <Image src={data.product.image} height={160} alt="image" />
           </Card.Section>
 
           <Text size="sm" weight={700} mt="sm">
-            {data.brand}
+            {data.product.brand}
           </Text>
 
           <Text size="sm" color="dimmed" mt="xs">
-            {data.name}
+            {data.product.name}
           </Text>
 
           <Badge color="blue" variant="light" mt="sm">
-            {data.price.low}{" "}DA
+            {data.product.price.low}{" "}DA
           </Badge>
         </Anchor>
       ) : (

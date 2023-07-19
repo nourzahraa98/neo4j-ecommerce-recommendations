@@ -1,33 +1,62 @@
 const { RunQuery } = require("../db_connect");
-const { v4: uuidv4 } = require('uuid');
-
+const { v4: uuidv4 } = require("uuid");
 
 class Product {
   constructor(body) {
-    this.body = body
+    this.body = body;
   }
 
   async save() {
-    const keys = Object.keys(this.body)
-    const query = `CREATE (n:Product {id: "${uuidv4()}", ${keys.map(key => `${key}: '${this.body[key]}'`).join(', ')}}) RETURN n`;
+    const keys = Object.keys(this.body);
+    const query = `CREATE (n:Product {id: "${uuidv4()}", ${keys
+      .map((key) => `${key}: '${this.body[key]}'`)
+      .join(", ")}}) RETURN n`;
     await RunQuery(query);
   }
 
   static async getOne(id) {
     try {
-      const query = `MATCH (n:Product) WHERE n.id = '${id}' RETURN n`;
+      const query = `
+      MATCH (n:Product {id: '${id}'})
+      OPTIONAL MATCH (n)<-[:FOR_PRODUCT]-(r:Rating)
+      OPTIONAL MATCH (r)-[:GAVE_RATING]->(u:User)
+      RETURN n,u,COLLECT(r) AS ratings
+      `;
       const result = await RunQuery(query);
-      return result.records[0].get("n");
+      const res = result.records.map((record) => {
+        return {
+          product: record.get("n").properties,
+          ratings: record.get("ratings").map((rating) => rating.properties),
+          user : record.get("u")
+        };
+      });
+      console.log(res[0])
+      return res;
     } catch (error) {
-      console.log("hhh")
+      console.log("Error:", error);
+      throw error;
     }
   }
+  
 
   static async getAll() {
-    const query = `MATCH (n:Product) RETURN n`;
+    const query = `
+      MATCH (n:Product)
+      OPTIONAL MATCH (n)<-[:FOR_PRODUCT]-(r:Rating)
+      RETURN n, COLLECT(r) AS ratings
+    `;
     const result = await RunQuery(query);
-    return result.records.map((record) => record.get("n"));
+    const res = result.records.map((record) => {
+      return {
+        product: record.get("n").properties,
+        ratings: record.get("ratings").map((rating) => rating.properties),
+      };
+    });
+    
+    return res;
   }
+  
+
 
   static async update(id, name, price, description, category) {
     const query = `
@@ -58,8 +87,8 @@ class Product {
     OR (p3.cpu = product.cpu OR p3.gpu = product.gpu OR p3.brand = product.brand)
     WITH DISTINCT p3, COUNT(DISTINCT otherUser) as similarity 
     ORDER BY similarity DESC
-    RETURN p3 LIMIT 12`
-  
+    RETURN p3 LIMIT 12`;
+
     const result = await RunQuery(query);
     return result.records.map((record) => record.get("p3"));
   }

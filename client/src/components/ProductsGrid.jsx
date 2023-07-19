@@ -9,7 +9,7 @@ import { AuthContext } from "../context/AuthContext";
 const ProductsGrid = ({ text, ProductsNumber, useRecommandation }) => {
   const [products, setProducts] = useState([]);
   const { currentUser } = useContext(AuthContext);
-
+  console.log(useRecommandation && currentUser )
   const url = useRecommandation && currentUser ? `http://localhost:4000/products/recommandations/${currentUser.id}` : `http://localhost:4000/products/some/${ProductsNumber}`;
 
   const fetchProducts = useCallback(async () => {

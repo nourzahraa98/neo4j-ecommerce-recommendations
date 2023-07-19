@@ -14,11 +14,14 @@ import {
   Stack,
   Container,useMantineColorScheme
 } from "@mantine/core";
+import { notifications } from '@mantine/notifications';
+
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ReactFlagsSelect from "react-flags-select";
+import { IconX } from "@tabler/icons";
 
 const LoginPage = (props) => {
     
@@ -51,24 +54,27 @@ const LoginPage = (props) => {
   });
 
   const submitHandeler = async (form) => {
-    console.log("submit handeler");
-    console.log(form);
     if (type === "login") {
-      console.log("login in progress");
       axios
         .post("http://localhost:4000/users/login", {
           email: form.email,
           password: form.password,
         })
         .then((res) => {
-          console.log("login successfull");
           dispatch({ type: "LOGIN", payload: res.data });
           
           navigate("/");
         })
         .catch((err) => {
           console.log(err);
-          console.log("login error");
+          notifications.show({
+            title: 'Invalid Email or Password',
+           icon: <IconX />,
+           color: 'red',
+           withBorder : true,
+         
+        
+          })
           if (err.response) {
             setErrorLoginOrRegister(err.response.data.message);
           } else {
