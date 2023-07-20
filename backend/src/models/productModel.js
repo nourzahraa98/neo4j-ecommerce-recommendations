@@ -27,17 +27,16 @@ class Product {
         return {
           product: record.get("n").properties,
           ratings: record.get("ratings").map((rating) => rating.properties),
-          user : record.get("u")
+          user: record.get("u"),
         };
       });
-      console.log(res[0])
+      console.log(res[0]);
       return res;
     } catch (error) {
       console.log("Error:", error);
       throw error;
     }
   }
-  
 
   static async getAll() {
     const query = `
@@ -52,11 +51,9 @@ class Product {
         ratings: record.get("ratings").map((rating) => rating.properties),
       };
     });
-    
+
     return res;
   }
-  
-
 
   static async update(id, name, price, description, category) {
     const query = `
@@ -91,6 +88,21 @@ class Product {
 
     const result = await RunQuery(query);
     return result.records.map((record) => record.get("p3"));
+  }
+
+  static async getHighestRatedProduct() {
+    console.log("a");
+
+    const query = `MATCH (p:Product)<-[:FOR_PRODUCT]-(r:Rating)
+    WITH p, COALESCE(AVG(toFloat(r.rating)), 0) AS averageRating
+    ORDER BY averageRating DESC
+    LIMIT 10
+    RETURN p, averageRating`;
+
+    const result = await RunQuery(query);
+    const res = [];
+    result.records.map((record) => res.push({ product: record.get("p").properties, rating: record.get('averageRating') }));
+    return res
   }
 }
 

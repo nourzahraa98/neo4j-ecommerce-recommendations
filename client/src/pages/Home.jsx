@@ -6,8 +6,8 @@ const HomePage = () => {
     return (
         <Container size={"xl"} p={0}>
             <HeroHeader />
-            <ProductsCarousel />
-            <ProductsGrid text="LISTE DES PRODUCTS" useRecommandation={false} ProductsNumber={4} />
+            <ProductsCarousel  section={'highest rated'}/>
+            <ProductsGrid text="LISTE DES PRODUCTS" section={false} ProductsNumber={4} />
             <FeaturesSection
                 title="Téchnologies utilisées"
                 description=""

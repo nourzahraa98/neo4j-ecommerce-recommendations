@@ -7,7 +7,7 @@ const {
   delete_product,
   update_product,
   get_some_products,
-  get_recommandations
+  get_recommandations,get_highest_rated_product
 } = require("../controllers/productController");
 const Product = require("../models/productModel");
 const axios = require("axios");
@@ -47,6 +47,7 @@ product_router.patch("/:id", update_product);
 
 product_router.get("/recommandations/:id", get_recommandations);
 
+product_router.post("/highest_rated",get_highest_rated_product)
 
 
 module.exports = product_router;

@@ -260,7 +260,7 @@ const OrderHistory = () => {
                             color="teal"
                             transform="uppercase"
                             variant="outline"
-                            disabled = {i.rating.length > 0 ? true : false}
+                            
                             onClick={() => navigate(`/rate-product?product=${i.product.id}&order=${i.order.id}`)}
                             
                           >

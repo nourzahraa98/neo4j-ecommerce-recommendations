@@ -52,7 +52,6 @@ export default function NavBar() {
             </Anchor>
           </Group>
 
-          <SearchAutoComplete className={classes.searchBar} />
 
           {!isMobile && (
             <Group>
@@ -100,10 +99,7 @@ export default function NavBar() {
                   </Button>
                 </>
               )}
-            </Group>
-          )}
-
-          <ThemeSwitcher />
+               <ThemeSwitcher />
           <Drawer
             className={classes.drawer}
             opened={opened}
@@ -113,6 +109,10 @@ export default function NavBar() {
           >
             <DrawerContent toggledrawer={toggle} />
           </Drawer>
+            </Group>
+          )}
+
+         
         </Group>
       </Container>
     </div>
