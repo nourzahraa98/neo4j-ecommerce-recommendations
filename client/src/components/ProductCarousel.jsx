@@ -3,48 +3,17 @@ import { Title, Box, Group, Button } from "@mantine/core";
 import { useMediaQuery, useToggle } from "@mantine/hooks";
 import ProductCard from "./ProductCard";
 import ProductCardSkeleton from "./ProductCardSkeleton";
-import { useEffect, useState } from "react";
+import { useEffect, useState ,useContext} from "react";
 import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
 
-const ProductsCarousel = ({ section }) => {
-    console.log(section)
-  const [products, setProducts] = useState(null);
-  const fetchProducts = async () => {
-    try {
-      const result = await axios.get("http://localhost:4000/products/some/15");
-      setProducts(result.data);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-  };
-
-  const fetchHighestRateProducts = async () => {
-    try {
-      const result = await axios.post(
-        "http://localhost:4000/products/highest_rated"
-      );
-      setProducts(result.data);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (section === "highest rated") {
-      fetchHighestRateProducts();
-    } else {
-      fetchProducts();
-    }
-  }, []);
-
-  useEffect(() => {
-    console.log(products);
-  }, [products]);
+const ProductsCarousel = ({ section,products }) => {
+  
 
   const is_sm = useMediaQuery("(min-width: 768px)");
 
   return (
-    <Box
+    <Box 
       sx={(theme) => ({
         margin: 10,
         //align children to the center
@@ -55,38 +24,35 @@ const ProductsCarousel = ({ section }) => {
         marginBottom: theme.spacing.xl * 3,
       })}
     >
-      <Group mb={20}>
-        <Title ml={10} order={2} transform="uppercase">
-          {section}
-        </Title>
-      </Group>
-      <Carousel
-        withControls={is_sm}
-        slideSize="19.5%"
-        slideGap={20}
-        loop
-        breakpoints={[
-          { maxWidth: "lg", slideSize: "25%" },
-          { maxWidth: "md", slideSize: "33.33333%" },
-          { maxWidth: "sm", slideSize: "50%" },
-          { maxWidth: "xs", slideSize: "75%" },
-        ]}
-        align={is_sm ? "start" : "center"}
-      >
-        {products
-          ? products.map((element, index) => (
+      {products && products.length > 0 && (
+        <>
+          <Group my={20}>
+            <Title ml={10} order={2} transform="uppercase">
+              {section}
+            </Title>
+          </Group>
+          <Carousel
+            withControls={is_sm}
+            slideSize="19.5%"
+            slideGap={20}
+            mb={'xl'}
+            loop
+            breakpoints={[
+              { maxWidth: "lg", slideSize: "25%" },
+              { maxWidth: "md", slideSize: "33.33333%" },
+              { maxWidth: "sm", slideSize: "50%" },
+              { maxWidth: "xs", slideSize: "75%" },
+            ]}
+            align={is_sm ? "start" : "center"}
+          >
+            {products.map((element, index) => (
               <Carousel.Slide key={index}>
                 <ProductCard index={index} data={element} />
               </Carousel.Slide>
-            ))
-          : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(
-              (_, index) => (
-                <Carousel.Slide key={index}>
-                  <ProductCardSkeleton />
-                </Carousel.Slide>
-              )
-            )}
-      </Carousel>
+            ))}
+          </Carousel>
+        </>
+      )}
     </Box>
   );
 };

@@ -1,4 +1,14 @@
-import { Accordion, createStyles,Grid,Text, Skeleton, Box,ScrollArea,Rating, Group } from "@mantine/core";
+import {
+  Accordion,
+  createStyles,
+  Grid,
+  Text,
+  Skeleton,
+  Box,
+  ScrollArea,
+  Rating,
+  Group,
+} from "@mantine/core";
 import { useState } from "react";
 const useStyles = createStyles((theme) => ({
   wrapper: {
@@ -36,7 +46,7 @@ export default function ProductCollapse({ isSkeleton, data }) {
             )}
           </Accordion.Panel>
         </Accordion.Item>
-        {data  ? (
+        {data ? (
           <>
             <Accordion.Item className={classes.item} value="another-account">
               <Accordion.Control>
@@ -53,33 +63,47 @@ export default function ProductCollapse({ isSkeleton, data }) {
                     <Skeleton height={13} width={"45%"} />
                   </>
                 ) : (
-                    <ScrollArea sx={{ height: "40vh" }} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
-                      <c>
-                        {
-                          data.ratings.map((ratings,index) => (
-                            <Grid.Col key={index}>
-                               <Box  sx={(theme) => ({
-          borderRadius: theme.radius.md,
-         
-            backgroundColor:
-              theme.colorScheme === "dark"
-                ? "#25262B"
-                : "#e4e4e4"
-        
-        })}  p={"md"}>
-           <Text >{ratings.feedback}</Text>
-          <Group position="right"> <Rating  value={Number(ratings.rating.low)} readOnly /></Group>
-        </Box>
-                            </Grid.Col>
-                          ))
-                        }
-                      </c>
+                  <ScrollArea
+                    sx={{ height: "40vh" }}
+                    onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
+                  >
+                    <c>
+                      {data.ratings.map((ratings, index) => (
+                        <Grid.Col key={index}>
+                          <Box
+                            sx={(theme) => ({
+                              borderRadius: theme.radius.md,
 
-</ScrollArea>
+                              backgroundColor:
+                                theme.colorScheme === "dark"
+                                  ? "#25262B"
+                                  : "#e4e4e4",
+                            })}
+                            p={"md"}
+                          >
+                            <Text>{ratings.feedback}</Text>
+                            <Group position="right">
+                              {" "}
+                              <Rating
+                                value={Number(ratings.rating.low)}
+                                readOnly
+                              />
+                            </Group>
+                            <Group position="right">
+                              {" "}
+                              <Text
+                                color="dimmed"
+                                size={'sm'}
+                              >{ratings.user.name}</Text>
+                            </Group>
+                          </Box>
+                        </Grid.Col>
+                      ))}
+                    </c>
+                  </ScrollArea>
                 )}
               </Accordion.Panel>
             </Accordion.Item>
-           
           </>
         ) : (
           <></>

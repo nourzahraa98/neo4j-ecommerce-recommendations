@@ -18,19 +18,40 @@ class Product {
     try {
       const query = `
       MATCH (n:Product {id: '${id}'})
-      OPTIONAL MATCH (n)<-[:FOR_PRODUCT]-(r:Rating)
-      OPTIONAL MATCH (r)-[:GAVE_RATING]->(u:User)
-      RETURN n,u,COLLECT(r) AS ratings
+OPTIONAL MATCH (n)<-[:FOR_PRODUCT]-(r:Rating)
+OPTIONAL MATCH (r)<-[:GAVE_RATING]-(u:User)
+RETURN n, COLLECT(r) AS ratings,COLLECT(u) as user
       `;
       const result = await RunQuery(query);
       const res = result.records.map((record) => {
+        const ratings = record
+          .get("ratings")
+          .filter(
+            (rating, index, self) =>
+              index ===
+              self.findIndex((r) => r.properties.id === rating.properties.id)
+          )
+          .map((rating) => rating.properties);
+
+        const user = record
+          .get("user")
+          .filter(
+            (user, index, self) =>
+              index ===
+              self.findIndex((u) => u.properties.id === user.properties.id)
+          )
+          .map((user) => {
+            delete user.properties.password;
+            return user.properties;
+          });
         return {
           product: record.get("n").properties,
-          ratings: record.get("ratings").map((rating) => rating.properties),
-          user: record.get("u"),
+          ratings: ratings.map((rating, index) => ({
+            ...rating,
+            user: user[index],
+          })),
         };
       });
-      console.log(res[0]);
       return res;
     } catch (error) {
       console.log("Error:", error);
@@ -53,6 +74,56 @@ class Product {
     });
 
     return res;
+  }
+
+  static async getSimilarProduct(id) {
+    const query = `
+    MATCH (u:User {id: '${id}'})-[:PLACED_ORDER]->(:Order)-[:INCLUDES]->(purchased:Product)
+    WITH COLLECT(DISTINCT purchased.category) AS purchasedCategories, u
+    MATCH (p:Product)
+    WHERE p.category IN purchasedCategories AND NOT EXISTS((u)-[:PLACED_ORDER]->(:Order)-[:INCLUDES]->(p))
+    WITH DISTINCT p
+
+    LIMIT 10
+    RETURN COLLECT(p) AS products;
+
+
+
+    
+`;
+
+    const result = await RunQuery(query);
+    console.log(result.records[0]);
+    const similarProducts = result.records[0]
+      .get("products")
+      .map((product) => product.properties);
+
+    console.log("Similar Products:", similarProducts.length);
+
+    return similarProducts;
+  }
+
+  static async getByRegions(regions) {
+    const query = `
+         
+    MATCH(u:User {region: '${regions}'})
+    WHERE NOT EXISTS((u)-[:PLACED_ORDER]->(:Order)-[:INCLUDES]->(:Product))
+    WITH u.region AS r
+    MATCH (u1:User {region: r})-[:PLACED_ORDER]->(o:Order)-[i:INCLUDES]->(p:Product)
+    RETURN DISTINCT p;
+    
+  
+      
+  `;
+
+    const result = await RunQuery(query);
+    console.log(result.records);
+    const similarProducts = result.records.map(record => record.get('p').properties)
+      
+
+    console.log("Similar Products:", similarProducts.length);
+
+    return similarProducts;
   }
 
   static async update(id, name, price, description, category) {
@@ -101,8 +172,13 @@ class Product {
 
     const result = await RunQuery(query);
     const res = [];
-    result.records.map((record) => res.push({ product: record.get("p").properties, rating: record.get('averageRating') }));
-    return res
+    result.records.map((record) =>
+      res.push({
+        product: record.get("p").properties,
+        rating: record.get("averageRating"),
+      })
+    );
+    return res;
   }
 }
 

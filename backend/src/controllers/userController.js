@@ -15,6 +15,7 @@ const login_user = async (req, res) => {
       email: user.properties.email,
       id: user.properties.id,
       name: user.properties.name,
+      region : user.properties.region
     });
   } catch (error) {
     console.log(error)
@@ -32,6 +33,7 @@ const register_user = async (req, res) => {
       email: u.email,
       id: u.id,
       name: u.name,
+      region : u.region
     });
   } catch (error) {
     res.status(400).send(error.message);

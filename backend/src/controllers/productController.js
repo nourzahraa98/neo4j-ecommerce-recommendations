@@ -20,6 +20,8 @@ const get_product_by_id = async (req, res) => {
     });
 };
 
+
+
 const get_highest_rated_product = async (req, res) => {
 
   await Product.getHighestRatedProduct()
@@ -27,10 +29,26 @@ const get_highest_rated_product = async (req, res) => {
       return res.status(200).send(product);
     })
     .catch((error) => {
-
+       console.log(error)
       return res.status(500).send({ message: error });
     });
 };
+
+const get_by_region = async (req, res) => {
+
+  await Product.getByRegions(req.params.region)
+    .then((product) => {
+      return res.status(200).send(product);
+    })
+    .catch((error) => {
+       console.log(error)
+      return res.status(500).send({ message: error });
+    });
+};
+
+
+
+
 
 const create_product = async (req, res) => {
   try {
@@ -99,6 +117,17 @@ const get_recommandations = async (req, res) => {
     });
 };
 
+
+const get_similiar_products = async (req, res) => {
+  await Product.getSimilarProduct(req.params.id)
+    .then((product) => {
+      res.send(product);
+    })
+    .catch((error) => {
+      res.status(500).send({ message: "product not found" });
+    });
+};
+
 module.exports = {
   get_all_products,
   get_product_by_id,
@@ -107,5 +136,5 @@ module.exports = {
   update_product,
   get_some_products,
   get_recommandations,
-  get_highest_rated_product,
+  get_highest_rated_product,get_similiar_products,get_by_region
 };

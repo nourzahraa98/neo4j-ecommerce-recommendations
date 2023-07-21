@@ -114,7 +114,11 @@ let items = []
                 if (!unwantedFields.includes(key)) {
                   return (
                     <Col span={span}   key={index}>
-                      <Card shadow="lg" p="md" radius="md" h={90} w={!isMobile ? 190 : 250}  bg={'dark'}>
+                      <Card shadow="lg" p="md" radius="md" h={90} w={!isMobile ? 190 : 250} sx={(theme) => ({
+                        backgroundColor: theme.colorScheme == 'dark' ?theme.colors.dark : '#d1d1d1'
+                      })
+
+                      }>
                         <Text weight={500} size="sm"  transform="uppercase" align="center">
                           {key.replace("_" , " ")}
                         </Text>

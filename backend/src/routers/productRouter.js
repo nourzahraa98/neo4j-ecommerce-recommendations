@@ -7,7 +7,7 @@ const {
   delete_product,
   update_product,
   get_some_products,
-  get_recommandations,get_highest_rated_product
+  get_recommandations,get_highest_rated_product,get_similiar_products, get_by_region
 } = require("../controllers/productController");
 const Product = require("../models/productModel");
 const axios = require("axios");
@@ -38,7 +38,6 @@ product_router.get("/", get_all_products);
 product_router.get("/some/:limit", get_some_products)
 
 product_router.get("/:id", get_product_by_id);
-
 product_router.post("/", create_product);
 
 product_router.delete("/:id", delete_product);
@@ -47,8 +46,11 @@ product_router.patch("/:id", update_product);
 
 product_router.get("/recommandations/:id", get_recommandations);
 
-product_router.post("/highest_rated",get_highest_rated_product)
+product_router.post("/highest_rated",get_highest_rated_product);
 
+product_router.get("/similar/:id",get_similiar_products);
+
+product_router.get('/region/:region',get_by_region)
 
 module.exports = product_router;
 

@@ -84,9 +84,13 @@ RETURN o`;
       const order = record.get("o").properties;
       const address = record.get("a").properties;
       const status = record.get("s").properties.status;
-      const rating = record.get("ratings") ? record.get("ratings").map(r => {return r.properties}) : null
-     console.log(record.get("ratings"))
-      return { product, order, address, status,rating };
+      const rating = record.get("ratings")
+        ? record.get("ratings").map((r) => {
+            return r.properties;
+          })
+        : null;
+      console.log(record.get("ratings"));
+      return { product, order, address, status, rating };
     });
   }
 
@@ -108,17 +112,16 @@ RETURN o`;
     return result;
   }
 
-  static async rate({user,rating,product,feedback,order}) {
+  static async rate({ user, rating, product, feedback, order }) {
     const query = `
-		MATCH (u:User {id: '${user}'})-[:PLACED_ORDER]->(o:Order)-[:INCLUDES]->(p:Product {id: '${product}'})
-  CREATE (r:Rating {rating: ${rating}})
-  SET r.feedback = '${feedback || ""}'
-  MERGE (r)-[:FOR_PRODUCT]->(p)
-  MERGE (u)-[:GAVE_RATING]->(r)
-  RETURN r, o, p, u
+    MATCH (u:User {id: '${user}'})-[:PLACED_ORDER]->(o:Order)-[:INCLUDES]->(p:Product {id: '${product}'})
+    CREATE (r:Rating {rating: ${rating}, id: '${uuidv4()}', feedback: '${feedback.replace(/'/g, "\\'") || ""}'})
+    MERGE (u)-[:GAVE_RATING]->(r)
+    MERGE (r)-[:FOR_PRODUCT]->(p)
+    RETURN r, o, p, u
   `;
     const result = await RunQuery(query);
-    console.log(result.records[0].get('u'));
+    console.log(result.records[0].get("u"));
     return result.records[0].get("r");
   }
 
