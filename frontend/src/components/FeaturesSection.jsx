@@ -1,4 +1,4 @@
-import { ThemeIcon, Text, Title, Container, SimpleGrid, useMantineTheme, createStyles, } from '@mantine/core';
+import { ThemeIcon, Text, Title, Container, SimpleGrid, useMantineTheme, createStyles,Box } from '@mantine/core';
 import { IconGauge, IconCookie, IconUser, IconMessage, IconMessage2, IconLock } from '@tabler/icons';
 
 export const MOCKDATA = [
@@ -40,7 +40,7 @@ export const MOCKDATA = [
 export function Feature({ icon: Icon, title, description }) {
     const theme = useMantineTheme();
     return (
-        <div>
+        <div style={{padding : '24px'}}>
             <ThemeIcon variant="light" size={40} radius={40}>
                 <Icon size={20} stroke={1.5} />
             </ThemeIcon>
@@ -100,12 +100,15 @@ export default function FeaturesSection({ title, description, data = MOCKDATA })
                 mt={60}
                 cols={3}
                 spacing={theme.spacing.xl * 2}
+              
                 breakpoints={[
                     { maxWidth: 980, cols: 2, spacing: 'xl' },
                     { maxWidth: 755, cols: 1, spacing: 'xl' },
                 ]}
             >
+                <Box   m={'lg'}>
                 {features}
+                </Box>
             </SimpleGrid>
         </Container>
     );

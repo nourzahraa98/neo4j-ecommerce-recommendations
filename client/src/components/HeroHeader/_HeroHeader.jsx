@@ -15,8 +15,7 @@ export default function HeroHeader() {
                             <span className={classes.highlight}>Digital-easy</span><br />Ecommerce Website
                         </Title>
                         <Text color="dimmed" mt="md">
-                            Découvrez notre site e-commerce exclusif de vente de produits informatiques, utilisant une base de données neo4j avancée pour générer des recommandations personnalisées pour chaque client
-                        </Text>
+                        Discover our exclusive e-commerce site selling computer products, using an advanced neo4j database to generate personalized recommendations for each customer </Text>
 
                         <Group mt={30}>
                             <Button radius="xl" size="md" className={classes.control}>
