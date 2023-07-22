@@ -51,7 +51,7 @@ const HomePage = () => {
     } catch (error) {
       console.error("Error fetching products:", error);
     }
-  }, [currentUser.id]);
+  }, [currentUser]);
 
   const fetchPopularProducts = useCallback(async () => {
     try {
@@ -66,34 +66,31 @@ const HomePage = () => {
     } catch (error) {
       console.error("Error fetching products:", error);
     }
-  }, [currentUser.region]);
+  }, [currentUser]);
 
   useEffect(() => {
+
+    if (currentUser){
     fetchHighestRateProducts();
 
     fetchSimilarProducts();
 
-    fetchPopularProducts();
+    fetchPopularProducts();}
 
     fetchProducts()
-  }, [fetchHighestRateProducts, fetchPopularProducts, fetchSimilarProducts]);
+  }, [currentUser, fetchHighestRateProducts, fetchPopularProducts, fetchSimilarProducts]);
 
   return (
     <Container size={"xl"} p={0}>
       <HeroHeader />
-      <ProductsCarousel
-        section={"highest rated"}
-        products={highestRatedProducts}
-      />
-      <ProductsCarousel
-        section={"similar products you purchased"}
-        products={similarProducts}
-      />
-
-<ProductsCarousel
-        section={"Popular products in your region"}
-        products={popularProducts}
-      />
+      { currentUser ? 
+      (<><ProductsCarousel
+          section={"highest rated"}
+          products={highestRatedProducts} /><ProductsCarousel
+            section={"similar products you purchased"}
+            products={similarProducts} /><ProductsCarousel
+            section={"Popular products in your region"}
+            products={popularProducts} /></>): <></>}
      <ProductsCarousel
         section={"More Products"}
         products={products}
