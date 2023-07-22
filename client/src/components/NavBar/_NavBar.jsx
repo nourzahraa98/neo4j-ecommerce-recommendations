@@ -48,7 +48,7 @@ export default function NavBar() {
               size="sm"
             />
             <Anchor component={Link} to="/" className={classes.logo} size={28}>
-              <img width={"200px"} height={"150px"} src={logosvg} alt="logo" />
+              <img width={"120px"} height={"120px"} src={logosvg} alt="logo" />
             </Anchor>
           </Group>
 
