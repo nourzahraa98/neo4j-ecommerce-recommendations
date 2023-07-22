@@ -94,8 +94,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
     };
   });
 const data = [
-    { link: 'information-and-chart', label: 'Info and Charts', icon: IconChartDots },
-    { link: 'manage-orders', label: 'Manage Orders', icon: IconListCheck },
+    { link: '', label: 'Manage Orders', icon: IconListCheck },
     { link: 'manage-products', label: 'Manage Products', icon: IconBox },
    
 ];

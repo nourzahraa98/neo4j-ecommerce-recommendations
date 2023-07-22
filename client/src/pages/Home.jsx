@@ -74,6 +74,8 @@ const HomePage = () => {
     fetchSimilarProducts();
 
     fetchPopularProducts();
+
+    fetchProducts()
   }, [fetchHighestRateProducts, fetchPopularProducts, fetchSimilarProducts]);
 
   return (
@@ -84,7 +86,7 @@ const HomePage = () => {
         products={highestRatedProducts}
       />
       <ProductsCarousel
-        section={"similar products"}
+        section={"similar products you purchased"}
         products={similarProducts}
       />
 
@@ -92,10 +94,9 @@ const HomePage = () => {
         section={"Popular products in your region"}
         products={popularProducts}
       />
-      <ProductsGrid
-        text="LISTE DES PRODUCTS"
-        section={false}
-        ProductsNumber={4}
+     <ProductsCarousel
+        section={"More Products"}
+        products={products}
       />
       <FeaturesSection title="Téchnologies utilisées" description="" />
       <Container>

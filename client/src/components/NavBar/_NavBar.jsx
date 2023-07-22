@@ -20,7 +20,7 @@ import useStyles from "./_style";
 import DrawerContent from "./DrawerContent";
 import ThemeSwitcher from "../ThemeSwitcher";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import logosvg from "../../assets/images/digital_easy_logo.svg";
+import logosvg from "../../assets/images/logo.png";
 import { AuthContext } from "../../context/AuthContext";
 
 export default function NavBar() {
@@ -48,7 +48,7 @@ export default function NavBar() {
               size="sm"
             />
             <Anchor component={Link} to="/" className={classes.logo} size={28}>
-              <img width={"120px"} height={"100px"} src={logosvg} alt="logo" />
+              <img width={"200px"} height={"150px"} src={logosvg} alt="logo" />
             </Anchor>
           </Group>
 

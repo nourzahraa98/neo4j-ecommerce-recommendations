@@ -12,7 +12,7 @@ export default function HeroHeader() {
                 <div className={classes.inner}>
                     <div className={classes.content}>
                         <Title className={classes.title}>
-                            <span className={classes.highlight}>Digital-easy</span><br />Ecommerce Website
+                            <span className={classes.highlight} style={{textTransform: 'uppercase'}}>Nour Tech</span><br />Ecommerce Website
                         </Title>
                         <Text color="dimmed" mt="md">
                         Discover our exclusive e-commerce site selling computer products, using an advanced neo4j database to generate personalized recommendations for each customer </Text>

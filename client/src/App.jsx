@@ -116,8 +116,7 @@ function App() {
             <Route path="change-password" element={<PasswordInfoSettings />} />
           </Route>
           <Route path="admin" element={<AdminPage />}>
-            <Route path="information-and-chart" element={<InfosAndCharts />} />
-            <Route path="manage-orders" element={<ManageOrders />} />
+            <Route index  element={<ManageOrders />} />
             <Route path="manage-products" element={<Outlet />}>
               <Route path="" element={<ManageProducts />} />
               <Route path="product" element={<ProductDetailsAdmin />} />

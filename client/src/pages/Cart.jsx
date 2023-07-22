@@ -11,13 +11,11 @@ import {
   Image,
   Text,
   Title,
-  TextInput,
-  Radio,
   Tooltip,
   useMantineTheme,
 } from "@mantine/core";
-import { notifications } from '@mantine/notifications';
-import { IconCheck, IconTrash, IconX} from "@tabler/icons";
+import { notifications } from "@mantine/notifications";
+import { IconCheck, IconTrash, IconX } from "@tabler/icons";
 import { AuthContext } from "../context/AuthContext";
 import { useCallback, useContext, useState } from "react";
 import axios from "axios";
@@ -62,25 +60,32 @@ const CartPage = () => {
     fetchUserShippingAddress();
   }, [fetchUserShippingAddress, getproducts]);
 
-
-
   const orderHandler = () => {
-    axios
-      .post(`${API_BASE_URL}/orders/checkout`, { userId: currentUser.id,shippingAddressId : shippingAddress })
-      .then((res) => {
-        notifications.show({
-          title: 'Order Placed Successfully',
-         icon: <IconCheck />,
-         withBorder : true,
-       
-      
-        })
-        navigate("/");
-      })
-      .catch((err) => {
-       
-        console.log(err);
+    if (shippingAddress == "") {
+      notifications.show({
+        title: "Please Add Shipping Address",
+        icon: <IconX />,
+        color: "red",
+        withBorder: true,
       });
+    } else {
+      axios
+        .post(`${API_BASE_URL}/orders/checkout`, {
+          userId: currentUser.id,
+          shippingAddressId: shippingAddress,
+        })
+        .then((res) => {
+          notifications.show({
+            title: "Order Placed Successfully",
+            icon: <IconCheck />,
+            withBorder: true,
+          });
+          navigate("/");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const openConfirmModal = () =>
@@ -100,51 +105,52 @@ const CartPage = () => {
               Add New Address
             </Button>
           </Group>
-          {address ?
-          (<Grid spacing="sm">
-            {address.map((i, index) => (
-              <Grid.Col
-                my={"sm"}
-                key={i.id}
-                sx={(theme) => ({
-                  borderRadius: theme.radius.md,
-                  border: "1px solid #25262B",
-                  cursor: "pointer",
-                  background:
-                    i.id === shippingAddress
-                      ? theme.colorScheme == "light"
-                        ? "#cfcfcf"
-                        : "#25262B"
-                      : "transparent",
-                })}
-                p={"md"}
-                onClick={() => {
-                  setShippingAddress(i.id);
-                  modals.closeAll();
-                  notifications.show({
-                    title: 'Address Selected Successfully',
-                   icon: <IconCheck />,
-                   withBorder : true,
-                 
-                
-                  })
-                }}
-              >
-                <Text weight={600} size={"sm"} color={""}>
-                  {i.name}
-                </Text>
-                <Text weight={400} size={"sm"} color={"dimmed"}>
-                  {i.address +
-                    " " +
-                    i.city +
-                    " " +
-                    i.country +
-                    "- " +
-                    i.zipcode}
-                </Text>
-              </Grid.Col>
-            ))}
-          </Grid>) : <></>}
+          {address ? (
+            <Grid spacing="sm">
+              {address.map((i, index) => (
+                <Grid.Col
+                  my={"sm"}
+                  key={i.id}
+                  sx={(theme) => ({
+                    borderRadius: theme.radius.md,
+                    border: "1px solid #25262B",
+                    cursor: "pointer",
+                    background:
+                      i.id === shippingAddress
+                        ? theme.colorScheme == "light"
+                          ? "#cfcfcf"
+                          : "#25262B"
+                        : "transparent",
+                  })}
+                  p={"md"}
+                  onClick={() => {
+                    setShippingAddress(i.id);
+                    modals.closeAll();
+                    notifications.show({
+                      title: "Address Selected Successfully",
+                      icon: <IconCheck />,
+                      withBorder: true,
+                    });
+                  }}
+                >
+                  <Text weight={600} size={"sm"} color={""}>
+                    {i.name}
+                  </Text>
+                  <Text weight={400} size={"sm"} color={"dimmed"}>
+                    {i.address +
+                      " " +
+                      i.city +
+                      " " +
+                      i.country +
+                      "- " +
+                      i.zipcode}
+                  </Text>
+                </Grid.Col>
+              ))}
+            </Grid>
+          ) : (
+            <></>
+          )}
         </>
       ),
     });
@@ -326,23 +332,16 @@ function CartProduct({ product }) {
   });
   const { currentUser } = useContext(AuthContext);
 
-
   const deleteItem = async (id) => {
     try {
-      const response = await axios.delete(
-        `${API_BASE_URL}/users/cart/${id}`
-      );
-
+      const response = await axios.delete(`${API_BASE_URL}/users/cart/${id}`);
     } catch (error) {
       console.error(error); // Handle the error
     }
   };
-  console.log(product.cartId)
+  console.log(product.cartId);
   return (
-    <Box
-      color={theme.colorScheme === "dark" ? "white" : "black"}
-      
-    >
+    <Box color={theme.colorScheme === "dark" ? "white" : "black"}>
       <Grid
         my={10}
         sx={(theme) => ({
@@ -365,30 +364,30 @@ function CartProduct({ product }) {
               })}
             >
               <Tooltip label="Delete this product">
-                <ActionIcon variant="outline" onClick={() => {
-                    deleteItem(product.cartId)
+                <ActionIcon
+                  variant="outline"
+                  onClick={() => {
+                    deleteItem(product.cartId);
                     navigate(0);
-                     notifications.show({
-                      title: 'Item Deleted Successfully',
+                    notifications.show({
+                      title: "Item Deleted Successfully",
                       message: product.name,
                       icon: <IconCheck />,
-                      withBorder : true,
-                   
-                  
-                    })
-                  }}>
-                  <IconTrash size={18} color="red"  />{" "}
+                      withBorder: true,
+                    });
+                  }}
+                >
+                  <IconTrash size={18} color="red" />{" "}
                 </ActionIcon>
               </Tooltip>
-              <Anchor component={Link}
-      to={`/product/${product.id}`}>
-              <Image
-                width={70}
-                height={70}
-                radius={"md"}
-                src={product.image}
-                alt={product.name}
-              />
+              <Anchor component={Link} to={`/product/${product.id}`}>
+                <Image
+                  width={70}
+                  height={70}
+                  radius={"md"}
+                  src={product.image}
+                  alt={product.name}
+                />
               </Anchor>
             </Group>
             <Box
@@ -419,9 +418,9 @@ function CartProduct({ product }) {
                 <Text weight={700} sx={showWhenMd}>
                   PRICE:
                 </Text>
-                <Text weight={700} size={'sm'}>
-                
-                {product.price.low}{" "}DA  </Text>
+                <Text weight={700} size={"sm"}>
+                  {product.price.low} DA{" "}
+                </Text>
               </Group>
             </Grid.Col>
             <Grid.Col xs={12} md={4}>

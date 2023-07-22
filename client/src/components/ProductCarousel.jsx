@@ -9,7 +9,7 @@ import { AuthContext } from "../context/AuthContext";
 
 const ProductsCarousel = ({ section,products }) => {
   
-
+     
   const is_sm = useMediaQuery("(min-width: 768px)");
 
   return (
