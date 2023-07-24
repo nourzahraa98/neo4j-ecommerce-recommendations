@@ -30,7 +30,7 @@ import {
   ManageAccounts,
   ManageProducts,
   ManageOrders,
-  ProductDetailsAdmin,
+  AddProduct,
   RateProject,
 } from "./components/_index";
 import { useContext, useEffect } from "react";
@@ -119,7 +119,7 @@ function App() {
             <Route index  element={<ManageOrders />} />
             <Route path="manage-products" element={<Outlet />}>
               <Route path="" element={<ManageProducts />} />
-              <Route path="product" element={<ProductDetailsAdmin />} />
+              <Route path="new" element={<AddProduct />} />
             </Route>
             <Route path="manage-accounts" element={<ManageAccounts />} />
             <Route path="contact-and-support" element={<ContactAndSupport />} />

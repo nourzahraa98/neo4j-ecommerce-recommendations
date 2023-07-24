@@ -225,7 +225,7 @@ export default function ProfileInfoSettings() {
                   <InputBase
                     placeholder="Your phone"
                     component={InputMask}
-                    mask="9999 99 99 99"
+                    mask="+961 99 999 999"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                   />

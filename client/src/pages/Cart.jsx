@@ -274,7 +274,7 @@ const CartPage = () => {
               <Text size={"sm"} transform="uppercase" color="dimmed">
                 Subtotal :{" "}
                 {cart.reduce(
-                  (acc, product) => acc + parseFloat(product.price.low),
+                  (acc, product) => acc + parseFloat(product.price.low ? product.price.low : Number(product.price)),
                   0
                 )}
                 DA
@@ -291,7 +291,7 @@ const CartPage = () => {
               <Text size={"md"} weight={500}>
                 Total :{" "}
                 {cart.reduce(
-                  (acc, product) => acc + parseFloat(product.price.low),
+                  (acc, product) => acc + parseFloat(product.price.low ? product.price.low : Number(product.price)),
                   0
                 )}
                 DA

@@ -24,9 +24,9 @@ const login_user = async (req, res) => {
 };
 
 const register_user = async (req, res) => {
-  const { email, password, region, name } = req.body;
+  const { email, password, region, name,phone } = req.body;
   try {
-    const user = new User(email, password, region, name);
+    const user = new User(email, password, region, name,phone);
     u = await user.save();
     console.log(u);
     res.send({

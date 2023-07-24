@@ -3,11 +3,12 @@ const { v4: uuidv4 } = require("uuid");
 const bcrypt = require("bcrypt");
 
 class User {
-  constructor(email, password, region, name) {
+  constructor(email, password, region, name,phone) {
     this.email = email;
     this.password = password;
     this.region = region;
     this.name = name;
+    this.phone = phone
   }
 
   async save() {
@@ -19,7 +20,7 @@ class User {
     }
     const createQuery = `CREATE (n:User {id: "${uuidv4()}", email: '${
       this.email
-    }', password: '${this.password}', name : '${this.name}' , region: '${
+    }', phone : '${this.phone}', password: '${this.password}', name : '${this.name}' , region: '${
       this.region
     }'}) RETURN n`;
     const user = await RunQuery(createQuery);

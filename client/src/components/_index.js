@@ -24,12 +24,13 @@ import InfosAndCharts from "./Admin/InfoAndCharts";
 import ManageAccounts from "./Admin/ManageAccounts";
 import ManageProducts from "./Admin/ManageProducts";
 import ManageOrders from "./Admin/ManageOrders";
+import AddProduct from "./Admin/AddProduct";
 import ProductDetailsAdmin from "./Admin/ProductDetailsAdmin"
 export {
     NavBar, Footer, HeroHeader, ProductsCarousel, ProductsGrid,
     ProductCard, FeaturesSection, ProductCardSkeleton, ThemeSwitcher,
     ProductCollapse, ProductDetails, ProductDetailsSkeleton, SettingsNav,
     ProfileInfoSettings, AddShippingAddress, PasswordInfoSettings,RateProject,
-    AdminNav, ArchiveAndReport, ContactAndSupport, InfosAndCharts,
+    AdminNav, ArchiveAndReport, ContactAndSupport, InfosAndCharts,AddProduct,
     ManageAccounts, ManageProducts, ManageOrders, ProductDetailsAdmin,ManageShippingAddress,OrderHistory
 };

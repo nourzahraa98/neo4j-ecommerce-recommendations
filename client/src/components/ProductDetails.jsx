@@ -107,7 +107,7 @@ let items = []
               {data.product.brand + " " + data.product.cpu}
             </Title>
             <Badge size="xl" variant="outline">
-              {data.product.price.low} {"DA"}
+              {data.product.price.low ? data.product.price.low : data.product.price} {"DA"}
             </Badge>
             <Grid my={10} px={isMobile ? 20 :10}  >
               {Object.keys(data.product).map((key, index) => {
@@ -133,7 +133,7 @@ let items = []
                 }
               })}
             </Grid>
-            <Group position="start" mt={20}>
+            <Group position="right" my={20}>
               <Button
                 disabled={!currentUser}
                 onClick={() => {
@@ -148,24 +148,7 @@ let items = []
                 Add to cart
               </Button>
 
-              <Tooltip
-                label={isLiked ? "Unlike this product" : "Like this product"}
-              >
-                <ActionIcon
-                  onClick={() => setIsLiked(!isLiked)}
-                  size="xl"
-                  radius="xl"
-                  variant="transparent"
-                >
-                  {isLiked ? <IconHeart fill="red" /> : <IconHeart />}
-                </ActionIcon>
-              </Tooltip>
-
-              <Tooltip label="Add to compare">
-                <ActionIcon size="xl" radius="xl" variant="transparent">
-                  <IconReplace size={25} />
-                </ActionIcon>
-              </Tooltip>
+              
             </Group>
             <ProductCollapse data={data} isSkeleton={data ? false : true} />
           </Grid.Col>

@@ -8,13 +8,16 @@ import {
   Group,
   Button,
   Divider,
-  Checkbox,
+  Checkbox,InputBase,
   Anchor,
   Select,
   Stack,
-  Container,useMantineColorScheme
+  Container,
+  useMantineColorScheme,
 } from "@mantine/core";
-import { notifications } from '@mantine/notifications';
+import InputMask from "react-input-mask";
+
+import { notifications } from "@mantine/notifications";
 
 import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
@@ -24,12 +27,12 @@ import ReactFlagsSelect from "react-flags-select";
 import { IconX } from "@tabler/icons";
 
 const LoginPage = (props) => {
-    
   const { currentUser, dispatch } = useContext(AuthContext);
   const { colorScheme } = useMantineColorScheme();
   const navigate = useNavigate();
   const [selected, setSelected] = useState("");
   const onSelect = (code) => setSelected(code);
+  const [phone, setPhone] = useState("");
 
   const [type, toggle] = useToggle(["login", "register"]);
   const [errorLoginOrRegister, setErrorLoginOrRegister] = useState(null);
@@ -62,19 +65,17 @@ const LoginPage = (props) => {
         })
         .then((res) => {
           dispatch({ type: "LOGIN", payload: res.data });
-          
+
           navigate("/");
         })
         .catch((err) => {
           console.log(err);
           notifications.show({
-            title: 'Invalid Email or Password',
-           icon: <IconX />,
-           color: 'red',
-           withBorder : true,
-         
-        
-          })
+            title: "Invalid Email or Password",
+            icon: <IconX />,
+            color: "red",
+            withBorder: true,
+          });
           if (err.response) {
             setErrorLoginOrRegister(err.response.data.message);
           } else {
@@ -87,14 +88,16 @@ const LoginPage = (props) => {
         email: form.email,
         password: form.password,
         region: selected,
-        name: form.name
-      })
+        phone : phone,
+        name: form.name,
+      });
       axios
         .post("http://localhost:4000/users/register", {
           email: form.email,
           password: form.password,
           region: selected,
-          name: form.name
+          name: form.name,
+          phone : phone,
         })
         .then((res) => {
           dispatch({ type: "LOGIN", payload: res.data });
@@ -126,7 +129,6 @@ const LoginPage = (props) => {
             }
             labelPosition="center"
             my="lg"
-        
           />
 
           <form onSubmit={form.onSubmit((form) => submitHandeler(form))}>
@@ -146,6 +148,8 @@ const LoginPage = (props) => {
                 {...form.getInputProps("email")}
               />
 
+              
+
               <PasswordInput
                 required
                 label="Password"
@@ -155,9 +159,20 @@ const LoginPage = (props) => {
 
               {type === "register" && (
                 <>
+                   <InputBase
+
+              required
+              label="Phone"
+                placeholder="Your phone"
+                component={InputMask}
+                mask="999 99 999 999"
+                onChange={(e) => setPhone(e.target.value)}
+               
+              />
                   <Text size={"sm"} mb={-10}>
                     Country
                   </Text>
+               
                   <ReactFlagsSelect
                     selected={selected}
                     onSelect={onSelect}

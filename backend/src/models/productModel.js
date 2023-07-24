@@ -7,9 +7,10 @@ class Product {
   }
 
   async save() {
-    const keys = Object.keys(this.body);
+    const keys = Object.keys(this.body.form);
+    console.log(keys);
     const query = `CREATE (n:Product {id: "${uuidv4()}", ${keys
-      .map((key) => `${key}: '${this.body[key]}'`)
+      .map((key) => `${key}: '${this.body.form[key]}'`)
       .join(", ")}}) RETURN n`;
     await RunQuery(query);
   }

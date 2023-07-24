@@ -94,7 +94,7 @@ export default function ProductCollapse({ isSkeleton, data }) {
                               <Text
                                 color="dimmed"
                                 size={'sm'}
-                              >{ratings.user.name}</Text>
+                              >{ratings.user ? ratings.user.name : "Anonymous"}</Text>
                             </Group>
                           </Box>
                         </Grid.Col>

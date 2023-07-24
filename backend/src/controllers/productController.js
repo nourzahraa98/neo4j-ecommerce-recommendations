@@ -52,6 +52,7 @@ const get_by_region = async (req, res) => {
 
 const create_product = async (req, res) => {
   try {
+    console.log(req.body)
     const product = new Product(req.body);
     await product
       .save()
