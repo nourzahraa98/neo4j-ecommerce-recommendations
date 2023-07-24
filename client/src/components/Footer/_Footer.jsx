@@ -2,7 +2,7 @@ import { Text, Container, ActionIcon, Group, Anchor } from '@mantine/core';
 import { IconBrandTwitter, IconBrandYoutube, IconBrandInstagram } from '@tabler/icons';
 import footerLinks from './FooterInfo';
 import useStyles from './_style';
-import logosvg from "../../assets/images/digital_easy_logo.svg"
+import logosvg from "../../assets/images/logo.png"
 
 export default function Footer() {
 
@@ -28,17 +28,15 @@ export default function Footer() {
             <Container className={classes.inner}>
                 <div className={classes.logo}>
                     <Anchor component={"a"} href="/" className={classes.logo} size={28}>
-                        <img width={"100px"} height={"100px"} src={logosvg} alt="logo" />
+                        <img width={"150px"} height={"160px"} src={logosvg} alt="logo" />
                     </Anchor>
-                    <Text size="xs" color="dimmed" className={classes.description}>
-                        PROJET BDD , encadré par : M.Mohamed Essaid KHANOUCHE
-                    </Text>
+                   
                 </div>
                 <div className={classes.groups}>{groups}</div>
             </Container>
             <Container className={classes.afterFooter}>
                 <Text color="dimmed" size="sm">
-                    © 2022 digital-easy. All rights reserved.
+                    © 2023 Nour Tech Laptops. All rights reserved.
                 </Text>
 
                 <Group spacing={0} className={classes.social} position="right" noWrap>

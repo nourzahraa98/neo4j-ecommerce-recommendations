@@ -16,7 +16,7 @@ import {
   IconTruckDelivery,
 } from "@tabler/icons";
 import { Link } from "react-router-dom";
-import logosvg from "../../assets/images/digital_easy_logo.svg";
+import logosvg from "../../assets/images/logo.png";
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = "icon";

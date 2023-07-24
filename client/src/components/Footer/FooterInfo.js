@@ -1,67 +1,28 @@
 const footerLinks = [
     {
-        "title": "Title 1",
+        "title": "Nour Tech",
         "links": [
             {
-                "label": "Label 1",
-                "link": "#"
+                "label": "Home",
+                "link": "/"
             },
             {
-                "label": "Label 2",
-                "link": "#"
+                "label": "Settings",
+                "link": "/settings"
             },
             {
-                "label": "Label 3",
-                "link": "#"
+                "label": "Shipping Address",
+                "link": "/settings/manage-shipping-info"
             },
             {
-                "label": "Label 4",
-                "link": "#"
-            }
+                "label": "Order",
+                "link": "/settings/order-history"
+            },
+          
         ]
     },
-    {
-        "title": "Title 2",
-        "links": [
-            {
-                "label": "Label 1",
-                "link": "#"
-            },
-            {
-                "label": "Label 2",
-                "link": "#"
-            },
-            {
-                "label": "Label 3",
-                "link": "#"
-            },
-            {
-                "label": "Label 4",
-                "link": "#"
-            }
-        ]
-    },
-    {
-        "title": "Title 3",
-        "links": [
-            {
-                "label": "Label 1",
-                "link": "#"
-            },
-            {
-                "label": "Label 2",
-                "link": "#"
-            },
-            {
-                "label": "Label 3",
-                "link": "#"
-            },
-            {
-                "label": "Label 4",
-                "link": "#"
-            }
-        ]
-    }
+  
+   
 ]
 
 export default footerLinks

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { createStyles, Navbar, Group, Anchor, Avatar, Text } from '@mantine/core';
 import { IconSettings, IconLogout, IconChartDots, IconBox, IconUsers, IconMessages, IconArchive, IconListCheck } from '@tabler/icons';
 import { Link } from 'react-router-dom';
-import logosvg from "../../assets/images/digital_easy_logo.svg"
+import logosvg from "../../assets/images/logo.png"
 
 const useStyles = createStyles((theme, _params, getRef) => {
     const icon = "icon";
