@@ -61,15 +61,20 @@ RETURN n, COLLECT(r) AS ratings,COLLECT(u) as user
 
   static async getAll() {
     const query = `
-      MATCH (n:Product)
-      OPTIONAL MATCH (n)<-[:FOR_PRODUCT]-(r:Rating)
-      RETURN n, COLLECT(r) AS ratings
+    MATCH (n:Product)
+    OPTIONAL MATCH (n)<-[:FOR_PRODUCT]-(r:Rating)
+    OPTIONAL MATCH (o:Order)-[:INCLUDES]->(n)
+    WITH n, COLLECT(r) AS ratings, COUNT(o) AS orders
+    RETURN n, ratings, orders, REDUCE(sum = 0, r IN ratings | sum + r.rating) / CASE size(ratings) WHEN 0 THEN 1 ELSE size(ratings) END AS averageRating
+    
     `;
     const result = await RunQuery(query);
     const res = result.records.map((record) => {
       return {
         product: record.get("n").properties,
         ratings: record.get("ratings").map((rating) => rating.properties),
+        orders : record.get("orders"),
+        averageRating : record.get("averageRating")
       };
     });
 

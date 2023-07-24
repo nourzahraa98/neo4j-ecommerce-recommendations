@@ -67,7 +67,7 @@ const ProductDetails = ({ data }) => {
 let items = []
  
    items = [
-    { title: "DIGITAL-EASY", href: `/product/${data.product.id}` },
+    { title: "NOUR-TECH", href: `/product/${data.product.id}` },
     { title: data.product.brand, href: `/product/${data.product.id}` },
     { title: data.product.cpu, href: `/product/${data.product.id}` },
   ].map((item, index) => (

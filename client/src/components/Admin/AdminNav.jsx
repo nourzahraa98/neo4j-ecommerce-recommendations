@@ -128,12 +128,9 @@ export default function AdminNav() {
                         color: theme.colors.gray[2],
                         cursor: 'pointer',
                     })}>
-                        <img width={"100px"} height={"100px"} src={logosvg} alt="logo" />
+                        <img width={"150px"} height={"130px"} src={logosvg} alt="logo" />
                     </Anchor>
-                    <Group p={10} className={classes.profileGroup} position='right'>
-                        <Avatar m={0} p={0} alt={"user_name"} radius="xl" size={35} className={classes.avatar} >H</Avatar>
-                        <Text className={classes.username} m={0} p={0}>Admin</Text>
-                    </Group>
+                    
                 </Group>
                 {links}
             </Navbar.Section>

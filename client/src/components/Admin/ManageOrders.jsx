@@ -87,7 +87,7 @@ export default function ManageOrders() {
   const [scrolled, setScrolled] = useState(false);
   const [orders, setOrders] = useState([]);
 
-  const fetchUserShippingAddress = useCallback(async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       const result = await axios.get(`${API_BASE_URL}/orders`);
 
@@ -107,8 +107,8 @@ export default function ManageOrders() {
   };
 
   useEffect(() => {
-    fetchUserShippingAddress();
-  }, [fetchUserShippingAddress]);
+    fetchOrders();
+  }, [fetchOrders]);
 
   return (
     <Container>

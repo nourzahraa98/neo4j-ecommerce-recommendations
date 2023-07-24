@@ -1,9 +1,9 @@
-import { ActionIcon, Anchor, Avatar, Container, createStyles, Group, ScrollArea, Table } from "@mantine/core";
-import { IconChevronLeft } from "@tabler/icons";
-import { useState } from "react";
+import { ActionIcon,Tooltip, Image, Button, Container, createStyles, Group, ScrollArea, Title,Box,Grid,Text,Rating} from "@mantine/core";
+import { IconEdit,IconTrash } from "@tabler/icons";
+import { useState,useCallback,useEffect } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
-import profuctImage from '../../assets/images/product-2.jpg'
-
+import { API_BASE_URL } from "../../constants";
 
 const useStyles = createStyles((theme) => ({
     header: {
@@ -43,48 +43,186 @@ const useStyles = createStyles((theme) => ({
 export default function ManageProducts() {
     const { classes, cx } = useStyles();
     const [scrolled, setScrolled] = useState(false);
+    const [products,setProducts] = useState([]);
 
-    const rows = data.map((product, _index) => (
-        <tr key={_index}>
-            <td className={classes.center}><Avatar src={profuctImage} size="lg" radius={"sm"} color={"primary"} /></td>
-            <td>{product.NAME}</td>
-            <td>{product.CPU}</td>
-            <td>{product.RAM}</td>
-            <td>{product.STORAGE}</td>
-            <td>{product.COUNT_IN_STOCK}</td>
-            <td>{product.PRICE}</td>
-            <td><Anchor component={Link} to="product">See More</Anchor></td>
-        </tr>
-    ));
+    const fetchProducts = useCallback(async () => {
+        try {
+          const result = await axios.get(`${API_BASE_URL}/products`);
+    
+          setProducts(result.data);
+        } catch (error) {
+          console.error("Error fetching products:", error);
+        }
+      }, []);
+
+      useEffect(() => {
+        fetchProducts();
+      },[fetchProducts])
+
 
     return (
-        <Container >
-            <Group position="apart" className={classes.header}>
-                <Group>
-                    <ActionIcon className={classes.icon} radius="xl">
-                        <IconChevronLeft size={24} />
-                    </ActionIcon>
-                    <h2>Manage Products</h2>
-                </Group>
-            </Group>
-            <ScrollArea sx={{ height: "70vh" }} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
-                <Table verticalSpacing="xs" sx={{ minWidth: 700 }}>
-                    <thead className={cx(classes.headerTable, { [classes.scrolled]: scrolled })}>
-                        <tr>
-                            <th>Product</th>
-                            <th>Name</th>
-                            <th>Cpu</th>
-                            <th>Ram</th>
-                            <th>Storage</th>
-                            <th>Count</th>
-                            <th>Price</th>
-                            <th>...</th>
-                        </tr>
-                    </thead>
-                    <tbody>{rows}</tbody>
-                </Table>
-            </ScrollArea>
-        </Container >
+        <Container>
+        <Group position="apart" className={classes.header}>
+        
+            <Title size="h3" transform="uppercase">
+              Manage Products
+            </Title>
+            <Button
+          onClick={() => {
+            navigate("/settings/add-shipping-info");
+          }}
+        >
+          Add New Product
+        </Button>
+        
+        </Group>
+        <ScrollArea
+          sx={{ height: "70vh" }}
+          onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
+        >
+          <Grid mb={"md"}>
+            {products.map((i, index) => (
+              <Grid.Col key={index} p={"sm"}>
+                <Box
+                  sx={(theme) => ({
+                    borderRadius: theme.radius.md,
+  
+                    backgroundColor:
+                      theme.colorScheme === "dark" ? "#25262B" : "#e4e4e4",
+                  })}
+                  pb={"md"}
+                >
+                  <Group
+                    p={"md"}
+                    position="apart"
+                    sx={(theme) => ({
+                      backgroundColor:
+                        theme.colorScheme === "dark" ? "#202022" : "#c3c3c3",
+                    })}
+                  >
+                    <Grid px={5}>
+                      <Grid.Col>
+                        <Text weight={"bold"} size="sm" transform="uppercase">
+                          Product ID
+                        </Text>
+                        <Text
+                          weight={"bold"}
+                          color={"dimmed"}
+                          size="xs"
+                          transform="uppercase"
+                        >
+                          {i.product.id}
+                        </Text>
+                      </Grid.Col>
+                    </Grid>
+                    <Grid>
+                      <Grid.Col>
+                        <Text weight={"bold"} size="sm" transform="uppercase">
+                          Total Orders
+                        </Text>
+                        <Text
+                          weight={"bold"}
+                          color={"dimmed"}
+                          size="xs"
+                          transform="uppercase"
+                        >
+                          {i.orders.low}
+                        </Text>
+                      </Grid.Col>
+                    </Grid>
+                    <Grid px={5}>
+                      <Grid.Col>
+                        <Text weight={"bold"} size="sm" transform="uppercase">
+                          Price
+                        </Text>
+                        <Text
+                          weight={"bold"}
+                          color={"dimmed"}
+                          size="xs"
+                          transform="uppercase"
+                        >
+                          {i.product.price.low} DA
+                        </Text>
+                      </Grid.Col>
+                    </Grid>
+                    <Grid px={5}>
+                      <Grid.Col>
+                        <Text weight={"bold"} size="sm" transform="uppercase">
+                          Rating
+                         </Text>
+                         <Rating value={i.averageRating.low}  readOnly />
+
+                      </Grid.Col>
+                    </Grid>
+                    <Grid px={5}>
+                      <Grid.Col>
+                        <Text weight={"bold"} size="sm" transform="uppercase">
+                          category
+                        </Text>
+                        <Text
+                          weight={"bold"}
+                          color={"dimmed"}
+                          size="xs"
+                          transform="uppercase"
+                        >
+                          {i.product.category}
+                        </Text>
+                      </Grid.Col>
+                    </Grid>
+                    <Grid px={5}>
+                      <Group>
+                      <Tooltip label="Edit">
+                      <ActionIcon
+                    
+                    onClick={() => {}}
+                  >
+                    <IconEdit size={24} />
+                  </ActionIcon></Tooltip>
+                  <Tooltip label="Delete">
+                   <ActionIcon
+                    
+                    onClick={() => {}}
+                  >
+                    <IconTrash size={24} />
+                  </ActionIcon></Tooltip>
+                      </Group>
+                    </Grid>
+                    
+                  </Group>
+                 
+  
+                  <Group pl={"md"} position="apart">
+                    <Group>
+                      <Image
+                        width={70}
+                        height={70}
+                        radius={"md"}
+                        src={i.product.image}
+                        alt={i.product.name}
+                      />
+                      <Box
+                        sx={(theme) => ({
+                          marginLeft: theme.spacing.xs,
+                          [theme.fn.smallerThan("sm")]: {
+                            marginLeft: 0,
+                          },
+                        })}
+                      >
+                        <Text weight={"bold"} size="sm" transform="uppercase">
+                          {i.product.brand + " " + i.product.cpu}
+                        </Text>
+                        <Text weight={"bold"} color={"dimmed"} size="xs">
+                          {i.product.cpu + " " + i.product.gpu}
+                        </Text>
+                      </Box>
+                    </Group>
+                  </Group>
+                </Box>
+              </Grid.Col>
+            ))}
+          </Grid>
+        </ScrollArea>
+      </Container>
     );
 }
 
