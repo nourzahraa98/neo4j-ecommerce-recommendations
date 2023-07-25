@@ -133,21 +133,7 @@ export default function ManageProducts() {
                       theme.colorScheme === "dark" ? "#202022" : "#c3c3c3",
                   })}
                 >
-                  <Grid px={5}>
-                    <Grid.Col>
-                      <Text weight={"bold"} size="sm" transform="uppercase">
-                        Product ID
-                      </Text>
-                      <Text
-                        weight={"bold"}
-                        color={"dimmed"}
-                        size="xs"
-                        transform="uppercase"
-                      >
-                        {i.product.id}
-                      </Text>
-                    </Grid.Col>
-                  </Grid>
+                  
                   <Grid>
                     <Grid.Col>
                       <Text weight={"bold"} size="sm" transform="uppercase">
